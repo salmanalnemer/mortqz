@@ -1,0 +1,502 @@
+<!-- home.html (Light Modern) -->
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>متجر التقنية | الرئيسية</title>
+
+  <!-- IMPORTANT: :root هنا فقط -->
+  <style>
+    :root{
+      --c1:#213448;
+      --c2:#547792;
+      --c3:#94B4C1;
+      --c4:#EAE0CF;
+
+      --bg:#F7FAFC;
+      --surface:#FFFFFF;
+      --surface2:#F1F5F9;
+      --text:#213448;
+      --muted:#5B7284;
+      --border:#E6EEF4;
+      --shadow: 0 14px 30px rgba(33,52,72,.10);
+      --shadow2: 0 10px 18px rgba(33,52,72,.08);
+      --radius:18px;
+    }
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 500px at 80% -10%, rgba(148,180,193,.25), transparent 60%),
+        radial-gradient(900px 500px at 10% 0%, rgba(234,224,207,.35), transparent 55%),
+        linear-gradient(180deg, var(--bg), #FFFFFF);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    .wrap{ max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+    main{ padding: 18px 0 36px; }
+
+    /* HERO */
+    .hero{
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(234,224,207,.55), transparent 55%),
+        radial-gradient(circle at 80% 20%, rgba(148,180,193,.40), transparent 55%),
+        linear-gradient(135deg, rgba(84,119,146,.14), rgba(255,255,255,.80));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero-inner{
+      display:grid;
+      grid-template-columns: 1.35fr .85fr;
+      gap: 16px;
+      padding: 22px;
+      align-items:center;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size: 34px;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      font-weight: 1000;
+    }
+    .hero p{
+      margin:0 0 16px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 14px;
+      max-width: 60ch;
+    }
+    .hero-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor:pointer;
+      font-weight: 1000;
+      box-shadow: 0 10px 18px rgba(33,52,72,.06);
+      user-select:none;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--c2), var(--c3));
+      color:#fff;
+      border-color: rgba(84,119,146,.18);
+      box-shadow: 0 12px 22px rgba(84,119,146,.18);
+    }
+    .btn:hover{ filter: brightness(1.02); }
+
+    .hero-side{
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.82);
+      padding: 16px;
+      box-shadow: var(--shadow2);
+    }
+    .stat-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .stat{
+      border-radius: 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 12px;
+    }
+    .stat .n{ font-weight: 1000; font-size: 16px; color: rgba(33,52,72,.92); }
+    .stat .t{ color: var(--muted); font-size: 12px; margin-top: 4px; }
+
+    /* Sections */
+    .section{ margin-top: 18px; }
+    .section-head{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap: 10px; flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .section-title{ margin:0; font-size: 18px; font-weight: 1000; }
+    .section-sub{ margin:0; color: var(--muted); font-size: 13px; }
+
+    /* Categories */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .cat{
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 14px;
+      box-shadow: 0 10px 18px rgba(33,52,72,.06);
+      display:flex; align-items:center; justify-content:space-between;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .cat:hover{ transform: translateY(-2px); box-shadow: var(--shadow2); }
+    .cat .name{ font-weight: 1000; }
+    .cat .hint{ color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .cat .icon{
+      width: 44px; height: 44px; border-radius: 16px;
+      background: linear-gradient(135deg, rgba(84,119,146,.18), rgba(148,180,193,.35));
+      border: 1px solid rgba(84,119,146,.18);
+      display:grid; place-items:center;
+      color: rgba(33,52,72,.85);
+      font-size: 18px;
+    }
+
+    /* Products */
+    .products{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .card{
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      overflow:hidden;
+      box-shadow: 0 10px 18px rgba(33,52,72,.06);
+      display:flex; flex-direction:column;
+      min-height: 320px;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover{ transform: translateY(-2px); box-shadow: var(--shadow2); }
+    .thumb{
+      height: 145px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(234,224,207,.65), transparent 60%),
+        linear-gradient(135deg, rgba(148,180,193,.55), rgba(84,119,146,.18));
+      position: relative;
+    }
+    .badge{
+      position:absolute; top: 12px; inset-inline-start: 12px;
+      background: rgba(255,255,255,.92);
+      color: rgba(33,52,72,.92);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 1000;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 14px rgba(33,52,72,.06);
+    }
+    .card-body{
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      flex:1;
+    }
+    .p-title{ font-weight: 1000; line-height: 1.35; }
+    .p-desc{ color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .row-between{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 10px; flex-wrap: wrap;
+      margin-top:auto;
+    }
+    .price{ font-weight: 1000; font-size: 16px; color: rgba(33,52,72,.95); }
+    .old{ color: rgba(91,114,132,.75); text-decoration: line-through; font-size: 12px; margin-inline-start: 6px; }
+
+    .add{
+      border:0;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--c2), var(--c3));
+      color: #fff;
+      font-weight: 1000;
+      display:inline-flex; align-items:center; gap: 8px;
+      box-shadow: 0 12px 22px rgba(84,119,146,.18);
+    }
+    .add:hover{ filter: brightness(1.03); }
+    .add:disabled{ opacity:.7; cursor:not-allowed; }
+
+    .fav{
+      border: 1px solid var(--border);
+      background: #fff;
+      color: rgba(33,52,72,.90);
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 14px;
+      display:inline-flex; align-items:center; gap: 8px;
+    }
+    .fav:hover{ background: var(--surface2); }
+
+    /* Benefits */
+    .benefits{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .benefit{
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 14px;
+      box-shadow: 0 10px 18px rgba(33,52,72,.06);
+    }
+    .benefit .t{ font-weight: 1000; margin: 8px 0 6px; }
+    .benefit .d{ color: var(--muted); font-size: 13px; line-height: 1.8; margin:0; }
+
+    @media (max-width: 980px){
+      .hero-inner{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 1fr 1fr; }
+      .products{ grid-template-columns: 1fr 1fr; }
+      .benefits{ grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px){
+      .grid{ grid-template-columns: 1fr; }
+      .products{ grid-template-columns: 1fr; }
+      .hero h1{ font-size: 26px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  {% include 'header.html' %}
+
+  <main class="wrap">
+    <section class="hero" aria-label="قسم المقدمة">
+      <div class="hero-inner">
+        <div>
+          <h1>تجربة شراء تقنية… بسيطة وراقية</h1>
+          <p>
+            اكتشف أفضل العروض على اللابتوبات والجوالات والإكسسوارات والألعاب.
+            شحن سريع، ودفع آمن، وخدمة عملاء تساعدك قبل وبعد الشراء.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#featured">تصفّح العروض</a>
+            <a class="btn" href="#categories">الأقسام</a>
+          </div>
+        </div>
+
+        <div class="hero-side">
+          <div style="font-weight:1000; font-size:16px;">مزايا المتجر</div>
+          <div style="color:var(--muted); font-size:13px; margin-top:6px; line-height:1.8;">
+            تغليف آمن + خيارات دفع متعددة + دعم سريع
+          </div>
+
+          <div class="stat-grid">
+            <div class="stat"><div class="n">24–48 ساعة</div><div class="t">توصيل لمعظم المدن</div></div>
+            <div class="stat"><div class="n">دفع آمن</div><div class="t">مدى / بطاقات / Apple Pay</div></div>
+            <div class="stat"><div class="n">ضمان</div><div class="t">سياسات واضحة</div></div>
+            <div class="stat"><div class="n">دعم سريع</div><div class="t">واتساب / بريد</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="categories">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">الأقسام</h2>
+          <p class="section-sub">اختر ما يناسبك من منتجات التقنية</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <a class="cat" href="#"><div><div class="name">لابتوبات</div><div class="hint">للعمل والدراسة</div></div><div class="icon">💻</div></a>
+        <a class="cat" href="#"><div><div class="name">جوالات</div><div class="hint">الأحدث والأفضل</div></div><div class="icon">📱</div></a>
+        <a class="cat" href="#"><div><div class="name">سماعات</div><div class="hint">صوت نقي</div></div><div class="icon">🎧</div></a>
+        <a class="cat" href="#"><div><div class="name">إكسسوارات</div><div class="hint">شواحن وكوابل</div></div><div class="icon">🔌</div></a>
+      </div>
+    </section>
+
+    <section class="section" id="featured">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">منتجات مميزة</h2>
+          <p class="section-sub">اختيارات شائعة مع أسعار جذابة</p>
+        </div>
+        <a class="btn" href="#" data-action="view-all">عرض الكل</a>
+      </div>
+
+      <div class="products">
+        <article class="card" data-product-id="p1" data-product-name="سماعة لاسلكية — عزل ضوضاء">
+          <div class="thumb"><span class="badge">خصم 15%</span></div>
+          <div class="card-body">
+            <div class="p-title">سماعة لاسلكية — عزل ضوضاء</div>
+            <div class="p-desc">بطارية طويلة، ميكروفون واضح، اتصال ثابت.</div>
+            <div class="row-between">
+              <div><span class="price">249 ر.س</span><span class="old">299</span></div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="fav" type="button" data-fav>♡ مفضلة</button>
+                <button class="add" type="button" data-add-to-cart>أضف للسلة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-product-id="p2" data-product-name="شاحن سريع USB-C 65W">
+          <div class="thumb"><span class="badge">جديد</span></div>
+          <div class="card-body">
+            <div class="p-title">شاحن سريع USB-C 65W</div>
+            <div class="p-desc">مناسب لابتوب/جوال، حماية حرارية وتيار ثابت.</div>
+            <div class="row-between">
+              <div><span class="price">139 ر.س</span></div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="fav" type="button" data-fav>♡ مفضلة</button>
+                <button class="add" type="button" data-add-to-cart>أضف للسلة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-product-id="p3" data-product-name="كيبورد ميكانيكي RGB">
+          <div class="thumb"><span class="badge">الأكثر مبيعاً</span></div>
+          <div class="card-body">
+            <div class="p-title">كيبورد ميكانيكي RGB</div>
+            <div class="p-desc">مفاتيح دقيقة، جودة عالية، مناسب للألعاب والعمل.</div>
+            <div class="row-between">
+              <div><span class="price">219 ر.س</span><span class="old">259</span></div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="fav" type="button" data-fav>♡ مفضلة</button>
+                <button class="add" type="button" data-add-to-cart>أضف للسلة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-product-id="p4" data-product-name="ماوس ألعاب — حساسية عالية">
+          <div class="thumb"><span class="badge">عرض محدود</span></div>
+          <div class="card-body">
+            <div class="p-title">ماوس ألعاب — حساسية عالية</div>
+            <div class="p-desc">تتبع سريع، أزرار قابلة للتخصيص، قبضة مريحة.</div>
+            <div class="row-between">
+              <div><span class="price">129 ر.س</span></div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="fav" type="button" data-fav>♡ مفضلة</button>
+                <button class="add" type="button" data-add-to-cart>أضف للسلة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2 class="section-title">لماذا متجر التقنية؟</h2>
+          <p class="section-sub">خدمات تساعدك تشتري وأنت مرتاح</p>
+        </div>
+      </div>
+
+      <div class="benefits">
+        <div class="benefit">
+          <div class="t">منتجات أصلية</div>
+          <p class="d">اختيارات موثوقة مع ضمان واضح وتجربة شراء مطمئنة.</p>
+        </div>
+        <div class="benefit">
+          <div class="t">شحن سريع</div>
+          <p class="d">تجهيز الطلبات بسرعة وتحديثات واضحة لتتبّع الشحنة.</p>
+        </div>
+        <div class="benefit">
+          <div class="t">دعم يساعدك</div>
+          <p class="d">تواصل سريع للاستفسارات قبل وبعد الشراء.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  {% include 'footer.html' %}
+
+  <script>
+    (function(){
+      function safeInt(v){
+        const n = parseInt(v, 10);
+        return Number.isFinite(n) && n >= 0 ? n : 0;
+      }
+
+      function setCartCount(count){
+        localStorage.setItem('cart_count', String(count));
+        window.dispatchEvent(new Event('cart:updated'));
+      }
+
+      function setFavCount(count){
+        localStorage.setItem('fav_count', String(count));
+        window.dispatchEvent(new Event('fav:updated'));
+      }
+
+      function getFavSet(){
+        try{ return new Set(JSON.parse(localStorage.getItem('fav_set') || '[]')); }
+        catch(_){ return new Set(); }
+      }
+      function saveFavSet(set){
+        localStorage.setItem('fav_set', JSON.stringify(Array.from(set)));
+      }
+
+      function toast(title, msg){
+        if(window.appToast) window.appToast(title, msg);
+        else alert((title ? title + "\n" : "") + (msg || ""));
+      }
+
+      // Add to cart
+      document.querySelectorAll('[data-add-to-cart]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const current = safeInt(localStorage.getItem('cart_count'));
+          setCartCount(current + 1);
+
+          const old = btn.textContent;
+          btn.textContent = 'تمت الإضافة ✅';
+          btn.disabled = true;
+          setTimeout(() => {
+            btn.textContent = old.trim();
+            btn.disabled = false;
+          }, 850);
+
+          toast('السلة', 'تمت إضافة المنتج للسلة ✅');
+        });
+      });
+
+      // Favorites per product
+      function refreshFavUI(){
+        const favSet = getFavSet();
+        document.querySelectorAll('[data-fav]').forEach(btn => {
+          const card = btn.closest('[data-product-id]');
+          const pid = card?.getAttribute('data-product-id');
+          const isOn = pid && favSet.has(pid);
+          btn.textContent = isOn ? '♥ مفضلة' : '♡ مفضلة';
+        });
+        setFavCount(favSet.size);
+      }
+
+      document.querySelectorAll('[data-fav]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('[data-product-id]');
+          const pid = card?.getAttribute('data-product-id');
+          const name = card?.getAttribute('data-product-name') || 'المنتج';
+          if(!pid) return;
+
+          const favSet = getFavSet();
+          let added = false;
+          if(favSet.has(pid)){ favSet.delete(pid); }
+          else{ favSet.add(pid); added = true; }
+
+          saveFavSet(favSet);
+          refreshFavUI();
+          toast('المفضلة', added ? ('تمت إضافة: ' + name) : ('تمت إزالة: ' + name));
+        });
+      });
+
+      // Demo action
+      document.querySelectorAll('[data-action]').forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          toast('تنبيه', 'زر جاهز ✅ اربطه بصفحة المنتجات لاحقاً.');
+        });
+      });
+
+      refreshFavUI();
+    })();
+  </script>
+
+</body>
+</html>

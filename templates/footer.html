@@ -1,0 +1,263 @@
+<!-- footer.html (Light Modern) -->
+<style>
+  .site-footer{
+    direction: rtl;
+    font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--text, #213448);
+  }
+  .site-footer .wrap{ max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+  .footer-shell{
+    background: linear-gradient(180deg, rgba(241,245,249,.80), rgba(255,255,255,.95));
+    border-top: 1px solid var(--border, #E6EEF4);
+  }
+
+  .footer-grid{
+    padding: 30px 0 16px;
+    display:grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    gap: 14px;
+  }
+
+  .footer-card{
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #E6EEF4);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 10px 18px rgba(33,52,72,.06);
+  }
+
+  .foot-brand{ display:flex; align-items:center; gap: 10px; margin-bottom: 10px; }
+  .foot-logo{
+    width: 40px; height: 40px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--c2,#547792), var(--c3,#94B4C1));
+    box-shadow: 0 12px 22px rgba(84,119,146,.16);
+    position: relative; overflow:hidden;
+  }
+  .foot-logo:before{
+    content:""; position:absolute; inset:-30%;
+    background: radial-gradient(circle at 30% 30%, rgba(234,224,207,.9), transparent 55%);
+    transform: rotate(10deg);
+    opacity:.85;
+  }
+
+  .footer-card h4{
+    margin: 0 0 10px;
+    font-size: 14px;
+    letter-spacing: .2px;
+    font-weight: 1000;
+  }
+  .footer-card p{
+    margin: 0;
+    color: var(--muted, #5B7284);
+    font-size: 13px;
+    line-height: 1.85;
+  }
+
+  .footer-links{ display:flex; flex-direction:column; gap: 10px; margin-top: 10px; }
+  .footer-links a{
+    color: rgba(33,52,72,.92);
+    font-size: 13px;
+    padding: 9px 10px;
+    border-radius: 12px;
+    border: 1px solid var(--border, #E6EEF4);
+    background: var(--surface2, #F1F5F9);
+  }
+  .footer-links a:hover{ background: #fff; }
+
+  .newsletter{
+    display:flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .newsletter input{
+    flex: 1 1 180px;
+    padding: 12px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--border, #E6EEF4);
+    background: #fff;
+    color: var(--text, #213448);
+    outline: none;
+  }
+  .newsletter input::placeholder{ color: rgba(91,114,132,.85); }
+  .newsletter button{
+    border:0; cursor:pointer;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--c2,#547792), var(--c3,#94B4C1));
+    color: #fff;
+    font-weight: 1000;
+    box-shadow: 0 10px 18px rgba(84,119,146,.18);
+  }
+  .newsletter button:hover{ filter: brightness(1.03); }
+
+  .social{ display:flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .social a{
+    display:inline-flex; align-items:center; gap: 8px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--border, #E6EEF4);
+    background: var(--surface2, #F1F5F9);
+    color: rgba(33,52,72,.92);
+    font-size: 13px;
+  }
+  .social a:hover{ background: #fff; }
+
+  .footer-bottom{
+    border-top: 1px solid var(--border, #E6EEF4);
+    padding: 14px 0;
+    color: var(--muted, #5B7284);
+    font-size: 13px;
+  }
+  .bottom-row{
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+
+  .payments{ display:flex; align-items:center; gap: 8px; flex-wrap: wrap; }
+  .pay-badge{
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--border, #E6EEF4);
+    background: #fff;
+    font-size: 12px;
+    color: rgba(33,52,72,.85);
+  }
+
+  .to-top{
+    position: fixed;
+    bottom: 18px;
+    inset-inline-start: 18px;
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    border: 1px solid var(--border, #E6EEF4);
+    background: rgba(255,255,255,.96);
+    box-shadow: 0 12px 24px rgba(33,52,72,.10);
+    cursor:pointer;
+    display:none;
+    align-items:center; justify-content:center;
+    color: rgba(33,52,72,.85);
+    z-index: 9998;
+  }
+  .to-top.show{ display:flex; }
+  .to-top:hover{ filter: brightness(1.02); }
+
+  @media (max-width: 980px){
+    .footer-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .footer-grid{ grid-template-columns: 1fr; }
+    .bottom-row{ justify-content: center; text-align:center; }
+    .to-top{ inset-inline-start: 12px; bottom: 12px; }
+  }
+</style>
+
+<footer class="site-footer">
+  <div class="footer-shell">
+    <div class="wrap">
+      <div class="footer-grid">
+        <div class="footer-card">
+          <div class="foot-brand">
+            <span class="foot-logo" aria-hidden="true"></span>
+            <div>
+              <div style="font-weight:1000; font-size:16px;">متجر التقنية</div>
+              <div style="color:rgba(91,114,132,.95); font-size:12px; margin-top:2px;">منتجات أصلية • شحن سريع • دعم مميز</div>
+            </div>
+          </div>
+
+          <p>
+            متجر متخصص في منتجات التقنية: لابتوبات، جوالات، إكسسوارات، ألعاب ومنزل ذكي.
+            تجربة شراء بسيطة، وتغليف آمن، ودفع موثوق.
+          </p>
+
+          <div class="social" aria-label="روابط التواصل">
+            <a href="#" title="X">X</a>
+            <a href="#" title="Instagram">Instagram</a>
+            <a href="#" title="WhatsApp">WhatsApp</a>
+          </div>
+        </div>
+
+        <div class="footer-card">
+          <h4>روابط سريعة</h4>
+          <div class="footer-links">
+            <a href="#">الرئيسية</a>
+            <a href="#categories">الأقسام</a>
+            <a href="#featured">عروض اليوم</a>
+            <a href="#">الأكثر مبيعاً</a>
+          </div>
+        </div>
+
+        <div class="footer-card">
+          <h4>خدمة العملاء</h4>
+          <div class="footer-links">
+            <a href="#" data-action="policy">سياسة الاستبدال والاسترجاع</a>
+            <a href="#" data-action="shipping">الشحن والتوصيل</a>
+            <a href="#" data-action="warranty">الضمان</a>
+            <a href="#" data-action="faq">الأسئلة الشائعة</a>
+          </div>
+        </div>
+
+        <div class="footer-card">
+          <h4>النشرة البريدية</h4>
+          <p>اشترك ليصلك جديد العروض والمنتجات أولاً بأول.</p>
+
+          <form class="newsletter" id="newsletterForm" action="#" method="post" novalidate>
+            <input type="email" name="email" placeholder="بريدك الإلكتروني" required>
+            <button type="submit">اشتراك</button>
+          </form>
+
+          <div style="margin-top:10px; color:rgba(91,114,132,.95); font-size:12px; line-height:1.7;">
+            يمكنك إلغاء الاشتراك في أي وقت.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="bottom-row">
+          <div>© <span id="yearNow"></span> متجر التقنية — جميع الحقوق محفوظة</div>
+          <div class="payments" aria-label="طرق الدفع">
+            <span class="pay-badge">مدى</span>
+            <span class="pay-badge">Visa</span>
+            <span class="pay-badge">Mastercard</span>
+            <span class="pay-badge">Apple Pay</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTopBtn" type="button" aria-label="الرجوع للأعلى">↑</button>
+
+<script>
+  (function(){
+    const year = document.getElementById('yearNow');
+    if(year) year.textContent = String(new Date().getFullYear());
+
+    const form = document.getElementById('newsletterForm');
+    if(form){
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const email = (form.querySelector('input[name="email"]')?.value || '').trim();
+        const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        if(!ok){
+          if(window.appToast) window.appToast('النشرة البريدية','أدخل بريد إلكتروني صحيح.');
+          else alert('أدخل بريد إلكتروني صحيح.');
+          return;
+        }
+        if(window.appToast) window.appToast('النشرة البريدية','تم الاشتراك بنجاح ✅');
+        else alert('تم الاشتراك بنجاح ✅');
+        form.reset();
+      });
+    }
+
+    const btn = document.getElementById('toTopBtn');
+    function onScroll(){
+      if(!btn) return;
+      btn.classList.toggle('show', window.scrollY > 500);
+    }
+    if(btn){
+      btn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  })();
+</script>
