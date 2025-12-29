@@ -1,0 +1,226 @@
+<section class="section" id="featured">
+
+  <style>
+    /* ===== Featured Products ===== */
+    .section-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:16px;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .section-title{
+      margin:0;
+      font-size:20px;
+      font-weight:900;
+      color:var(--text);
+    }
+
+    .products{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:16px;
+    }
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 14px 26px rgba(33,52,72,.08);
+      display:flex;
+      flex-direction:column;
+      transition:.25s ease;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 22px 36px rgba(33,52,72,.12);
+    }
+
+    .thumb{
+      height:170px;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(234,224,207,.6), transparent 60%),
+        linear-gradient(135deg, rgba(148,180,193,.6), rgba(84,119,146,.25));
+      background-size:cover;
+      background-position:center;
+      position:relative;
+    }
+
+    .badge{
+      position:absolute;
+      top:12px;
+      inset-inline-start:12px;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      background:rgba(255,255,255,.95);
+      border:1px solid var(--border);
+      box-shadow:0 8px 14px rgba(33,52,72,.12);
+      color:var(--text);
+    }
+
+    .card-body{
+      padding:16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      flex:1;
+    }
+
+    .p-title{
+      font-weight:900;
+      font-size:15px;
+      line-height:1.4;
+      color:var(--text);
+    }
+
+    .p-desc{
+      font-size:13px;
+      line-height:1.8;
+      color:var(--muted);
+      min-height:42px;
+    }
+
+    .row-between{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:auto;
+      flex-wrap:wrap;
+    }
+
+    .price{
+      font-size:16px;
+      font-weight:900;
+      color:var(--text);
+    }
+    .old{
+      font-size:12px;
+      color:#8a9aa8;
+      text-decoration:line-through;
+      margin-inline-start:6px;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .add{
+      border:0;
+      padding:10px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:900;
+      background:linear-gradient(135deg, var(--c2), var(--c3));
+      color:#fff;
+      box-shadow:0 12px 22px rgba(84,119,146,.25);
+      transition:.2s;
+    }
+    .add:hover{ filter:brightness(1.05); }
+    .add:disabled{ opacity:.6; cursor:not-allowed; }
+
+    .fav{
+      border:1px solid var(--border);
+      background:#fff;
+      padding:10px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:700;
+      color:var(--text);
+      transition:.2s;
+    }
+    .fav:hover{ background:var(--surface2); }
+
+    @media(max-width:1024px){
+      .products{ grid-template-columns:repeat(3,1fr); }
+    }
+    @media(max-width:768px){
+      .products{ grid-template-columns:repeat(2,1fr); }
+    }
+    @media(max-width:520px){
+      .products{ grid-template-columns:1fr; }
+    }
+  </style>
+
+  <div class="section-head">
+    <h2 class="section-title">منتجات مميزة</h2>
+    <a class="btn" href="#" data-action="view-all">عرض الكل</a>
+  </div>
+
+  {% if products %}
+    <div class="products">
+      {% for p in products %}
+        {% with img=p.prefetched_images.0 %}
+          <article class="card"
+            data-product-id="prod-{{ p.id }}"
+            data-product-name="{{ p.name|escape }}">
+
+            <div class="thumb"
+              {% if img and img.image %}
+                style="background-image:url('{{ img.image.url }}')"
+              {% endif %}
+            >
+              {% if p.compare_at_price and p.compare_at_price > p.price %}
+                <span class="badge">خصم</span>
+              {% elif p.is_featured %}
+                <span class="badge">مميز</span>
+              {% endif %}
+            </div>
+
+            <div class="card-body">
+              <div class="p-title">{{ p.name }}</div>
+
+              <div class="p-desc">
+                {% if p.description %}
+                  {{ p.description|truncatechars:90 }}
+                {% else %}
+                  منتج تقني متوفر الآن.
+                {% endif %}
+              </div>
+
+              <div class="row-between">
+                <div>
+                  <span class="price">{{ p.price }} {{ p.currency }}</span>
+                  {% if p.compare_at_price and p.compare_at_price > p.price %}
+                    <span class="old">{{ p.compare_at_price }}</span>
+                  {% endif %}
+                </div>
+
+                <div class="actions">
+                  <button class="fav" type="button" data-fav>♡</button>
+
+                  {% if p.track_inventory and p.stock_quantity == 0 %}
+                    <button class="add" type="button" disabled>غير متوفر</button>
+                  {% else %}
+                    <button class="add" type="button" data-add-to-cart>
+                      أضف للسلة
+                    </button>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </article>
+        {% endwith %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div style="
+      margin-top:14px;
+      border:1px dashed var(--border);
+      background:rgba(255,255,255,.75);
+      border-radius:18px;
+      padding:16px;
+      color:var(--muted);
+      line-height:1.9;
+      text-align:center;
+    ">
+      لا توجد منتجات للعرض حالياً.
+    </div>
+  {% endif %}
+</section>

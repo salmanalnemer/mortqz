@@ -151,7 +151,7 @@
       font-size: 18px;
     }
 
-    /* Products + cards (موجودة هنا لأنها تُستخدم داخل include) */
+    /* Products */
     .products{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
@@ -168,12 +168,15 @@
       transition: transform .15s ease, box-shadow .15s ease;
     }
     .card:hover{ transform: translateY(-2px); box-shadow: var(--shadow2); }
+
     .thumb{
       height: 145px;
       background:
         radial-gradient(circle at 30% 20%, rgba(234,224,207,.65), transparent 60%),
         linear-gradient(135deg, rgba(148,180,193,.55), rgba(84,119,146,.18));
       position: relative;
+      background-size: cover;
+      background-position: center;
     }
     .badge{
       position:absolute; top: 12px; inset-inline-start: 12px;
@@ -186,6 +189,7 @@
       border: 1px solid var(--border);
       box-shadow: 0 8px 14px rgba(33,52,72,.06);
     }
+
     .card-body{
       padding: 14px;
       display:flex;
@@ -195,6 +199,7 @@
     }
     .p-title{ font-weight: 1000; line-height: 1.35; }
     .p-desc{ color: var(--muted); font-size: 12px; line-height: 1.8; }
+
     .row-between{
       display:flex; align-items:center; justify-content:space-between;
       gap: 10px; flex-wrap: wrap;
@@ -263,7 +268,6 @@
   {% include 'header.html' %}
 
   <main class="wrap">
-    <!-- ===== HERO (Banner) ===== -->
     <section class="hero" aria-label="قسم المقدمة">
       <div class="hero-inner">
         <div>
@@ -294,8 +298,8 @@
       </div>
     </section>
 
-    <!-- ✅ هنا مباشرة تحت البنر نستدعي قالب المنتجات -->
-    {% include "catalog_templates/products_section.html" %}
+    <!-- ✅ المنتجات من قاعدة البيانات تحت البنر مباشرة -->
+    {% include "catalog_templates/products_section.html" with products=featured_products %}
 
     <section class="section" id="categories">
       <div class="section-head">

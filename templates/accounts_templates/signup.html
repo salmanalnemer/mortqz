@@ -1,0 +1,180 @@
+{% load static %}
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>إنشاء حساب</title>
+
+  <style>
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+      background:#f6f8fb;
+      color:#111;
+    }
+
+    .auth-wrap{
+      max-width: 520px;
+      margin: 26px auto 50px;
+      padding: 0 14px;
+    }
+
+    .auth-card{
+      background:#fff;
+      border:1px solid #e7eaf0;
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,.06);
+    }
+
+    h1{ margin:0 0 8px; font-size:22px; color:#213448; }
+    p{ margin:0 0 14px; color:#556; line-height:1.7; }
+
+    label{
+      display:block;
+      margin: 10px 0 6px;
+      font-size:13px;
+      color:#334;
+      font-weight: 700;
+    }
+
+    input{
+      width:100%;
+      padding:12px 12px;
+      border:1px solid #dfe3ea;
+      border-radius:14px;
+      outline:none;
+      background:#fff;
+      box-sizing:border-box;
+    }
+    input:focus{
+      border-color:#94B4C1;
+      box-shadow:0 0 0 4px rgba(148,180,193,.25);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap: wrap;
+    }
+    .row > div{ flex: 1 1 210px; }
+
+    .auth-btn{
+      width:100%;
+      padding:12px 14px;
+      border:0;
+      border-radius:14px;
+      background: linear-gradient(135deg, #547792, #94B4C1);
+      color:#fff;
+      font-weight: 900;
+      cursor:pointer;
+      box-shadow: 0 10px 18px rgba(84,119,146,.18);
+      margin-top: 12px;
+    }
+    .auth-btn:hover{ filter: brightness(1.03); }
+
+    .muted{
+      font-size:13px;
+      color:#667;
+      margin-top:12px;
+      text-align:center;
+    }
+    .muted a{ color:#213448; text-decoration:none; font-weight:900; }
+
+    .msg{
+      border-radius:14px;
+      padding:10px;
+      margin:10px 0;
+      font-size:13px;
+      line-height:1.7;
+    }
+    .msg.error{ background:#fff1f1; border:1px solid #ffd0d0; color:#7a1a1a; }
+    .msg.success{ background:#f0fff4; border:1px solid #c7f0d2; color:#155b2a; }
+
+    .check{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:10px;
+      color:#334;
+      font-size: 13px;
+    }
+    .check input{ width:auto; }
+
+    .auth-spacer{ height: 10px; }
+  </style>
+</head>
+
+<body>
+  {% include "header.html" %}
+  <div class="auth-spacer"></div>
+
+  <main class="auth-wrap">
+    <section class="auth-card">
+      <h1>إنشاء حساب جديد</h1>
+      <p>املأ البيانات التالية لإنشاء حسابك.</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="msg {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <label>الاسم الكامل</label>
+        <input name="full_name" value="{{ full_name|default:'' }}" autocomplete="name" required>
+
+        <label>اسم المستخدم</label>
+        <input name="username" value="{{ username|default:'' }}" autocomplete="username" required>
+
+        <label>البريد الإلكتروني</label>
+        <input name="email" type="email" value="{{ email|default:'' }}" autocomplete="email" required>
+
+        <label>رقم الجوال (اختياري)</label>
+        <input name="phone" value="{{ phone|default:'' }}" inputmode="tel" placeholder="+9665XXXXXXXX أو 05XXXXXXXX">
+
+        <div class="row">
+          <div>
+            <label>كلمة المرور</label>
+            <input name="password1" type="password" autocomplete="new-password" required>
+          </div>
+          <div>
+            <label>تأكيد كلمة المرور</label>
+            <input name="password2" type="password" autocomplete="new-password" required>
+          </div>
+        </div>
+
+        <div class="check">
+          <input id="mkt" type="checkbox" name="marketing" {% if marketing %}checked{% endif %}>
+          <label for="mkt" style="margin:0; font-weight:700;">أوافق على استقبال العروض والرسائل التسويقية</label>
+        </div>
+
+        <button class="auth-btn" type="submit">إنشاء حساب</button>
+      </form>
+
+      <div class="muted">
+        لديك حساب؟ <a href="{% url 'accounts:login' %}">تسجيل الدخول</a>
+      </div>
+    </section>
+  </main>
+
+  {% include "footer.html" %}
+
+  <script>
+    // UX بسيط: منع إرسال النموذج إذا كلمات المرور غير متطابقة (واجهة فقط)
+    document.querySelector("form")?.addEventListener("submit", function(e){
+      const p1 = document.querySelector("input[name='password1']")?.value || "";
+      const p2 = document.querySelector("input[name='password2']")?.value || "";
+      if(p1 && p2 && p1 !== p2){
+        e.preventDefault();
+        alert("كلمتا المرور غير متطابقتين");
+      }
+    });
+  </script>
+</body>
+</html>

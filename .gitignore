@@ -1,0 +1,13 @@
+# Secrets
+.env
+
+# Django
+__pycache__/
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+
+# Virtual env
+venv/
+.env/

@@ -1,3 +1,4 @@
+{% load static %}
 <!-- header.html (Light Modern) -->
 <style>
   .site-header{
@@ -236,9 +237,25 @@
           <a class="mini-link" href="#featured">عروض اليوم</a>
         </div>
         <div class="top-right">
-          <span class="chip">دفع آمن</span>
-          <a class="mini-link" href="#" data-action="login">تسجيل الدخول</a>
-          <a class="mini-link" href="#" data-action="signup">حساب جديد</a>
+          <div class="top-right">
+
+            {% if request.user.is_authenticated %}
+              <!-- ✅ ترحيب باسم المستخدم من الجلسة -->
+              <span class="chip">
+                مرحباً،
+                {{ request.user.get_full_name|default:request.user.username }}
+              </span>
+
+              <!-- ✅ زر تسجيل خروج -->
+              <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="mini-link" style="cursor:pointer;">تسجيل خروج</button>
+              </form>
+            {% else %}
+              <a class="mini-link" href="{% url 'accounts:login' %}" data-action="login">تسجيل الدخول</a>
+              <a class="mini-link" href="{% url 'accounts:signup' %}" data-action="signup">حساب جديد</a>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
@@ -265,7 +282,15 @@
         </form>
 
         <div class="actions">
-          <a class="icon-btn" href="#" data-action="account"><span class="title">حسابي</span></a>
+          <!-- ✅ اسم المستخدم داخل الهيدر بجانب (حسابي) -->
+          <a class="icon-btn" href="#" data-action="account">
+            <span class="title">حسابي</span>
+            {% if request.user.is_authenticated %}
+              <span class="badge" style="min-width:auto;height:auto;padding:2px 8px;line-height:1.6;">
+                {{ request.user.get_full_name|default:request.user.username }}
+              </span>
+            {% endif %}
+          </a>
 
           <button class="icon-btn" type="button" id="favBtn" aria-pressed="false">
             <span class="title">المفضلة</span>
@@ -393,7 +418,9 @@
     document.querySelectorAll('[data-action]').forEach(el=>{
       el.addEventListener('click',(e)=>{
         const a = el.getAttribute('data-action') || '';
-        if(a !== 'cart'){ // cart اربطه بصفحة السلة لاحقاً
+
+        // ✅ لا تمنع تنقّل صفحات الدخول/التسجيل (اتركها تفتح الروابط)
+        if(a !== 'cart' && a !== 'login' && a !== 'signup'){
           e.preventDefault();
           toastShow('تنبيه', 'زر ('+a+') جاهز — اربطه بالباكند لاحقاً');
         }
@@ -417,6 +444,21 @@
     });
     window.addEventListener('cart:updated', syncBadges);
     window.addEventListener('fav:updated', syncBadges);
+
+    // ✅ إجبار التنقّل لصفحات الدخول/التسجيل (يتجاوز preventDefault)
+    function forceNavigate(selector){
+      const el = document.querySelector(selector);
+      if(!el) return;
+
+      el.addEventListener('click', function(e){
+        const href = (this.getAttribute('href') || '').trim();
+        if(!href || href === '#') return;
+        e.stopPropagation();
+      }, true); // capture=true
+    }
+
+    forceNavigate('[data-action="login"]');
+    forceNavigate('[data-action="signup"]');
 
     syncBadges();
   })();

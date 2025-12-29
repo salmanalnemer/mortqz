@@ -1,0 +1,156 @@
+{% load static %}
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>تسجيل الدخول</title>
+
+  <style>
+    /* ✅ لا نستخدم .wrap حتى لا يتعارض مع header.html */
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+      background:#f6f8fb;
+      color:#111;
+    }
+
+    .auth-wrap{
+      max-width: 460px;
+      margin: 26px auto 50px;
+      padding: 0 14px;
+    }
+
+    .auth-card{
+      background:#fff;
+      border:1px solid #e7eaf0;
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.06);
+    }
+
+    .auth-card h1{ margin:0 0 8px; font-size:22px; color:#213448; }
+    .auth-card p{ margin:0 0 14px; color:#556; line-height:1.7; }
+
+    .auth-card label{
+      display:block;
+      margin: 10px 0 6px;
+      font-size: 13px;
+      color:#334;
+      font-weight: 700;
+    }
+
+    .auth-card input{
+      width:100%;
+      padding: 12px 12px;
+      border:1px solid #dfe3ea;
+      border-radius: 14px;
+      outline:none;
+      background:#fff;
+      box-sizing:border-box;
+    }
+
+    .auth-card input:focus{
+      border-color:#94B4C1;
+      box-shadow: 0 0 0 4px rgba(148,180,193,.25);
+    }
+
+    .auth-btn{
+      width:100%;
+      padding: 12px 14px;
+      border:0;
+      border-radius: 14px;
+      cursor:pointer;
+      color:#fff;
+      font-weight: 900;
+      background: linear-gradient(135deg, #547792, #94B4C1);
+      box-shadow: 0 10px 18px rgba(84,119,146,.18);
+    }
+    .auth-btn:hover{ filter: brightness(1.03); }
+
+    .muted{
+      font-size: 13px;
+      color:#667;
+      margin-top: 12px;
+      text-align:center;
+    }
+    .muted a{
+      color:#213448;
+      text-decoration:none;
+      font-weight: 900;
+    }
+
+    .msg{
+      border-radius: 14px;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .msg.error{ background:#fff1f1; border:1px solid #ffd0d0; color:#7a1a1a; }
+    .msg.success{ background:#f0fff4; border:1px solid #c7f0d2; color:#155b2a; }
+
+    .check{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin: 10px 0 14px;
+      color:#334;
+      font-size: 13px;
+    }
+    .check input{ width:auto; }
+
+    /* ✅ مسافة لطيفة لأن الهيدر Sticky */
+    .auth-spacer{ height: 10px; }
+  </style>
+</head>
+
+<body>
+  {% include "header.html" %}
+  <div class="auth-spacer"></div>
+
+  <main class="auth-wrap">
+    <section class="auth-card">
+      <h1>تسجيل الدخول</h1>
+      <p>ادخل باسم المستخدم أو البريد أو رقم الجوال، ثم كلمة المرور.</p>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="msg {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <label>البريد / اسم المستخدم / رقم الجوال</label>
+        <input name="identifier" value="{{ identifier|default:'' }}" autocomplete="username" required>
+
+        <label>كلمة المرور</label>
+        <input name="password" type="password" autocomplete="current-password" required>
+
+        <div class="check">
+          <input id="rem" type="checkbox" name="remember" {% if remember %}checked{% endif %}>
+          <label for="rem" style="margin:0; font-weight:700;">تذكرني</label>
+        </div>
+
+        <button class="auth-btn" type="submit">دخول</button>
+      </form>
+
+      <div class="muted">
+        لا تملك حساب؟ <a href="{% url 'accounts:signup' %}">إنشاء حساب</a>
+      </div>
+    </section>
+  </main>
+
+  {% include "footer.html" %}
+
+  <script>
+    // UX: تنظيف المسافات من حقل المعرّف
+    const idInput = document.querySelector("input[name='identifier']");
+    idInput?.addEventListener("blur", ()=>{ idInput.value = (idInput.value || "").trim(); });
+  </script>
+</body>
+</html>
