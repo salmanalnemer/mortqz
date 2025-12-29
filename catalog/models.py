@@ -9,6 +9,9 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 
+# =========================
+# Category
+# =========================
 class Category(models.Model):
     """
     تصنيفات المنتجات (تدعم شجرة: تصنيف رئيسي/فرعي).
@@ -71,6 +74,9 @@ class Category(models.Model):
         super().save(*args, **kwargs)
 
 
+# =========================
+# Product
+# =========================
 class Product(models.Model):
     """
     المنتج الأساسي.
@@ -111,7 +117,6 @@ class Product(models.Model):
         help_text=_("إظهار المنتج في الواجهة كمنتج مميز."),
     )
 
-    # السعر الأساسي (لمنتج بدون variants)
     currency = models.CharField(
         max_length=10,
         default="SAR",
@@ -134,7 +139,6 @@ class Product(models.Model):
         help_text=_("اختياري: إذا وضعته يظهر كسعر قديم للمقارنة."),
     )
 
-    # المخزون الأساسي (لمنتج بدون variants)
     track_inventory = models.BooleanField(
         default=True,
         verbose_name=_("تتبع المخزون"),
@@ -164,7 +168,8 @@ class Product(models.Model):
         ]
         constraints = [
             models.CheckConstraint(
-                condition=models.Q(compare_at_price__isnull=True) | models.Q(compare_at_price__gte=0),
+                condition=models.Q(compare_at_price__isnull=True)
+                | models.Q(compare_at_price__gte=0),
                 name="catalog_product_compare_at_non_negative",
             ),
         ]
@@ -175,12 +180,17 @@ class Product(models.Model):
     @property
     def has_variants(self) -> bool:
         return self.variants.filter(is_active=True).exists()
+    
+    @property
+    def primary_image_url(self) -> str:
+        img = (
+            self.images.filter(is_primary=True).order_by("sort_order").first()
+            or self.images.order_by("sort_order").first()
+        )
+        return img.public_url if img else ""
+
 
     def get_current_price(self) -> Decimal:
-        """
-        إذا عندك Variants لاحقًا تقدر تعتمد سعر أول Variant نشط،
-        لكن هنا نرجع سعر المنتج الأساسي.
-        """
         return self.price
 
     def save(self, *args, **kwargs):
@@ -190,6 +200,9 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 
+# =========================
+# Product Variant
+# =========================
 class ProductVariant(models.Model):
     """
     متغير منتج (SKU) مثل: لون/مقاس.
@@ -248,7 +261,6 @@ class ProductVariant(models.Model):
         verbose_name=_("كمية المخزون"),
     )
 
-    # خصائص بسيطة بدون تعقيد (تقدر تطورها لاحقًا)
     color = models.CharField(
         max_length=60,
         blank=True,
@@ -285,14 +297,18 @@ class ProductVariant(models.Model):
         ]
 
     def __str__(self) -> str:
-        # عرض أنظف في لوحة التحكم
         label = self.title or self.sku
         return f"{self.product.name} - {label}"
 
 
+# =========================
+# Product Image (Cloudinary)
+# =========================
 class ProductImage(models.Model):
     """
-    صور المنتج (تحتاج Pillow لاستخدام ImageField).
+    صور المنتج:
+    - إما رفع محلي عبر ImageField
+    - أو اختيار من Cloudinary عبر image_public_id
     """
 
     product = models.ForeignKey(
@@ -302,10 +318,22 @@ class ProductImage(models.Model):
         verbose_name=_("المنتج"),
     )
 
+    # ✅ رفع محلي (اختياري)
     image = models.ImageField(
         upload_to="products/%Y/%m/",
-        verbose_name=_("الصورة"),
+        verbose_name=_("الصورة (رفع محلي)"),
+        null=True,
+        blank=True,
     )
+
+    # ✅ اختيار من Cloudinary (اختياري)
+    image_public_id = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("Cloudinary Public ID"),
+        help_text=_("مثال: products/2025/12/abc123"),
+    )
+
     alt_text = models.CharField(
         max_length=200,
         blank=True,
@@ -336,6 +364,25 @@ class ProductImage(models.Model):
 
     def __str__(self) -> str:
         return f"صورة المنتج ({self.product_id})"
+
+    @property
+    def public_url(self) -> str:
+        """
+        يرجع رابط الصورة الفعلي:
+        - إن كان image_public_id موجود => Cloudinary URL
+        - وإلا إن كان image موجود => image.url
+        - وإلا => ''
+        """
+        if self.image_public_id:
+            # ✅ cloud name عندك
+            cloud_name = "duv2jsooa"
+            return f"https://res.cloudinary.com/{cloud_name}/image/upload/{self.image_public_id}"
+        if self.image:
+            try:
+                return self.image.url
+            except Exception:
+                return ""
+        return ""
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

@@ -156,57 +156,56 @@
   {% if products %}
     <div class="products">
       {% for p in products %}
-        {% with img=p.prefetched_images.0 %}
-          <article class="card"
-            data-product-id="prod-{{ p.id }}"
-            data-product-name="{{ p.name|escape }}">
+        <article class="card"
+          data-product-id="prod-{{ p.id }}"
+          data-product-name="{{ p.name|escape }}">
 
-            <div class="thumb"
-              {% if img and img.image %}
-                style="background-image:url('{{ img.image.url }}')"
-              {% endif %}
-            >
-              {% if p.compare_at_price and p.compare_at_price > p.price %}
-                <span class="badge">خصم</span>
-              {% elif p.is_featured %}
-                <span class="badge">مميز</span>
+          {# ✅ الصورة الآن تعتمد على p.primary_image_url (محلي أو Cloudinary) #}
+          <div class="thumb"
+            {% if p.primary_image_url %}
+              style="background-image:url('{{ p.primary_image_url }}')"
+            {% endif %}
+          >
+            {% if p.compare_at_price and p.compare_at_price > p.price %}
+              <span class="badge">خصم</span>
+            {% elif p.is_featured %}
+              <span class="badge">مميز</span>
+            {% endif %}
+          </div>
+
+          <div class="card-body">
+            <div class="p-title">{{ p.name }}</div>
+
+            <div class="p-desc">
+              {% if p.description %}
+                {{ p.description|truncatechars:90 }}
+              {% else %}
+                منتج تقني متوفر الآن.
               {% endif %}
             </div>
 
-            <div class="card-body">
-              <div class="p-title">{{ p.name }}</div>
-
-              <div class="p-desc">
-                {% if p.description %}
-                  {{ p.description|truncatechars:90 }}
-                {% else %}
-                  منتج تقني متوفر الآن.
+            <div class="row-between">
+              <div>
+                <span class="price">{{ p.price }} {{ p.currency }}</span>
+                {% if p.compare_at_price and p.compare_at_price > p.price %}
+                  <span class="old">{{ p.compare_at_price }}</span>
                 {% endif %}
               </div>
 
-              <div class="row-between">
-                <div>
-                  <span class="price">{{ p.price }} {{ p.currency }}</span>
-                  {% if p.compare_at_price and p.compare_at_price > p.price %}
-                    <span class="old">{{ p.compare_at_price }}</span>
-                  {% endif %}
-                </div>
+              <div class="actions">
+                <button class="fav" type="button" data-fav>♡</button>
 
-                <div class="actions">
-                  <button class="fav" type="button" data-fav>♡</button>
-
-                  {% if p.track_inventory and p.stock_quantity == 0 %}
-                    <button class="add" type="button" disabled>غير متوفر</button>
-                  {% else %}
-                    <button class="add" type="button" data-add-to-cart>
-                      أضف للسلة
-                    </button>
-                  {% endif %}
-                </div>
+                {% if p.track_inventory and p.stock_quantity == 0 %}
+                  <button class="add" type="button" disabled>غير متوفر</button>
+                {% else %}
+                  <button class="add" type="button" data-add-to-cart>
+                    أضف للسلة
+                  </button>
+                {% endif %}
               </div>
             </div>
-          </article>
-        {% endwith %}
+          </div>
+        </article>
       {% endfor %}
     </div>
   {% else %}
