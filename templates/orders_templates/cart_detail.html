@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>السلة | متجر مرتكز التقنية</title>
+
+  <style>
+    :root{
+      --c1:#213448; --c2:#547792; --c3:#94B4C1; --c4:#EAE0CF;
+      --bg:#F7FAFC; --surface:#fff; --surface2:#F1F5F9;
+      --text:#213448; --muted:#5B7284; --border:#E6EEF4;
+      --shadow:0 14px 30px rgba(33,52,72,.10);
+      --radius:18px;
+    }
+
+    body{
+      margin:0;
+      background:
+        radial-gradient(900px 500px at 80% -10%, rgba(148,180,193,.25), transparent 60%),
+        radial-gradient(900px 500px at 10% 0%, rgba(234,224,207,.35), transparent 55%),
+        linear-gradient(180deg, var(--bg), #FFFFFF);
+      color:var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+    main{ padding: 18px 0 36px; }
+
+    .page-head{
+      display:flex; align-items:flex-end; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      margin: 10px 0 14px;
+    }
+    .page-head h1{ margin:0; font-size:22px; font-weight:1000; }
+    .page-head p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.6fr .8fr;
+      gap: 14px;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--border);
+      font-weight:1000;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+
+    .items{ padding: 10px; display:flex; flex-direction:column; gap:10px; }
+    .item{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.92);
+      border-radius: 18px;
+      display:grid;
+      grid-template-columns: 86px 1fr;
+      gap: 12px;
+      padding: 10px;
+    }
+    .thumb{
+      width:86px; height:86px;
+      border-radius: 16px;
+      border:1px solid var(--border);
+      background:
+        radial-gradient(circle at 30% 20%, rgba(234,224,207,.65), transparent 60%),
+        linear-gradient(135deg, rgba(148,180,193,.55), rgba(84,119,146,.18));
+      background-size: cover;
+      background-position:center;
+      overflow:hidden;
+    }
+    .meta{ display:flex; flex-direction:column; gap:6px; min-width:0; }
+    .title{ font-weight:1000; line-height:1.4; }
+    .sku{ font-size:12px; color: var(--muted); }
+
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 10px; flex-wrap:wrap;
+      margin-top: 4px;
+    }
+
+    .price{ font-weight:1000; }
+    .muted{ color: var(--muted); font-size: 12px; }
+
+    .qty{
+      display:flex; align-items:center; gap:8px;
+      border:1px solid var(--border);
+      background: var(--surface2);
+      border-radius: 999px;
+      padding: 6px;
+    }
+    .qty input{
+      width:70px;
+      border:0; outline:0;
+      background: transparent;
+      text-align:center;
+      font-weight:1000;
+      color:var(--text);
+    }
+    .btn{
+      border:0;
+      cursor:pointer;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 1000;
+      background: #fff;
+      border:1px solid var(--border);
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--c2), var(--c3));
+      color:#fff;
+      border-color: rgba(84,119,146,.18);
+    }
+    .btn.danger{
+      background: rgba(231, 76, 60, .10);
+      color: rgba(140, 30, 20, .95);
+      border: 1px solid rgba(231, 76, 60, .20);
+    }
+
+    .summary{ padding: 12px; }
+    .sum-box{
+      padding: 12px;
+      border:1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      display:flex; flex-direction:column; gap:10px;
+    }
+    .sum-row{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .sum-row strong{ font-size: 16px; }
+    .sum-actions{ display:flex; flex-direction:column; gap:8px; margin-top:6px; }
+    .note{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .empty{
+      padding: 18px;
+      text-align:center;
+      color: var(--muted);
+      line-height:1.9;
+    }
+
+    @media(max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  {% include "header.html" %}
+
+  {# ✅ يحاول يجلب رابط catalog:home بدون كسر الصفحة إذا غير موجود #}
+  {% url 'catalog:home' as catalog_home_url %}
+  {% if not catalog_home_url %}
+    {% url 'shop:home' as catalog_home_url %}
+  {% endif %}
+  {% if not catalog_home_url %}
+    {% url 'shop:catalog_home' as catalog_home_url %}
+  {% endif %}
+  {% if not catalog_home_url %}
+    {% with "/" as catalog_home_url %}{% endwith %}
+  {% endif %}
+
+  <main class="wrap">
+    <div class="page-head">
+      <div>
+        <h1>سلة التسوق</h1>
+        <p>عدد العناصر: <strong>{{ cart_count }}</strong></p>
+      </div>
+
+      <a class="btn" href="{{ catalog_home_url|default:'/' }}">متابعة التسوق</a>
+    </div>
+
+    <div class="grid">
+      <section class="card" aria-label="عناصر السلة">
+        <div class="hd">
+          <span>العناصر</span>
+          <span class="muted">تحكم بالكميات والحذف</span>
+        </div>
+
+        {% if items %}
+          <div class="items">
+            {% for it in items %}
+              <article class="item" data-item-id="{{ it.id }}">
+                <div class="thumb"
+                     {% if it.image_url %}
+                       style="background-image:url('{{ it.image_url }}')"
+                     {% endif %}
+                     aria-hidden="true"></div>
+
+                <div class="meta">
+                  <div class="title">{{ it.title }}</div>
+                  {% if it.sku %}
+                    <div class="sku">SKU: {{ it.sku }}</div>
+                  {% endif %}
+
+                  <div class="row">
+                    <div>
+                      <div class="price">{{ it.unit_price }} {{ currency }}</div>
+                      <div class="muted">الإجمالي: <strong>{{ it.line_total }} {{ currency }}</strong></div>
+                    </div>
+
+                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+
+                      {# ✅ نفس فكرة الحماية لروابط update/remove #}
+                      {% url 'orders:cart_update' it.id as upd_url %}
+                      {% url 'orders:cart_remove' it.id as rm_url %}
+
+                      <form method="post" action="{{ upd_url|default:'#' }}">
+                        {% csrf_token %}
+                        <div class="qty">
+                          <input name="quantity" type="number" min="1" max="999" value="{{ it.quantity }}" />
+                          <button class="btn primary" type="submit" {% if not upd_url %}disabled{% endif %}>تحديث</button>
+                        </div>
+                        {% if not upd_url %}
+                          <div class="muted" style="margin-top:6px;">تنبيه: رابط تحديث السلة غير معرف في urls.py</div>
+                        {% endif %}
+                      </form>
+
+                      <form method="post" action="{{ rm_url|default:'#' }}">
+                        {% csrf_token %}
+                        <button class="btn danger" type="submit" {% if not rm_url %}disabled{% endif %}>حذف</button>
+                        {% if not rm_url %}
+                          <div class="muted" style="margin-top:6px;">تنبيه: رابط حذف السلة غير معرف في urls.py</div>
+                        {% endif %}
+                      </form>
+
+                    </div>
+                  </div>
+                </div>
+              </article>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="empty">
+            سلتك فارغة حالياً.<br/>
+            ابدأ بإضافة منتجات من الصفحة الرئيسية.
+          </div>
+        {% endif %}
+      </section>
+
+      <aside class="card" aria-label="ملخص السلة">
+        <div class="hd">الملخص</div>
+        <div class="summary">
+          <div class="sum-box">
+            <div class="sum-row">
+              <span>المجموع الفرعي</span>
+              <strong>{{ subtotal }} {{ currency }}</strong>
+            </div>
+
+            <div class="sum-row">
+              <span>الشحن</span>
+              <strong>—</strong>
+            </div>
+
+            <div class="sum-row" style="border-top:1px dashed var(--border); padding-top:10px;">
+              <span>الإجمالي المتوقع</span>
+              <strong>{{ subtotal }} {{ currency }}</strong>
+            </div>
+
+            <div class="sum-actions">
+              <button class="btn primary" type="button" disabled>إتمام الشراء (لاحقًا)</button>
+              <a class="btn" href="{{ catalog_home_url|default:'/' }}">متابعة التسوق</a>
+            </div>
+
+            <div class="note">
+              ملاحظة: زر “إتمام الشراء” سنفعّله لاحقًا عند إنشاء Order وتحويل CartItem إلى OrderItem.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  {% include "footer.html" %}
+</body>
+</html>

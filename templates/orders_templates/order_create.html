@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إنشاء طلب جديد</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma;
+      background: #f7f9fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 80px auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.08);
+    }
+
+    h1 {
+      margin-bottom: 12px;
+      color: #213448;
+      font-size: 24px;
+    }
+
+    p {
+      color: #555;
+      line-height: 1.8;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 24px;
+      border: none;
+      border-radius: 12px;
+      background: #213448;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:hover {
+      background: #1a2c3a;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>إنشاء طلب جديد</h1>
+  <p>
+    عند الضغط على الزر أدناه سيتم إنشاء طلب جديد
+    بحالة <strong>مسودة</strong> مرتبط بحسابك.
+  </p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">إنشاء الطلب</button>
+  </form>
+</div>
+
+</body>
+</html>

@@ -157,7 +157,8 @@
     <div class="products">
       {% for p in products %}
         <article class="card"
-          data-product-id="prod-{{ p.id }}"
+          data-product-id="{{ p.id }}"
+          data-dom-id="prod-{{ p.id }}"
           data-product-name="{{ p.name|escape }}">
 
           {# ✅ الصورة الآن تعتمد على p.primary_image_url (محلي أو Cloudinary) #}
@@ -198,7 +199,11 @@
                 {% if p.track_inventory and p.stock_quantity == 0 %}
                   <button class="add" type="button" disabled>غير متوفر</button>
                 {% else %}
-                  <button class="add" type="button" data-add-to-cart>
+                  <!-- ✅ زر الإضافة صار يرسل product_id الحقيقي -->
+                  <button class="add"
+                          type="button"
+                          data-add-to-cart
+                          data-product-id="{{ p.id }}">
                     أضف للسلة
                   </button>
                 {% endif %}
