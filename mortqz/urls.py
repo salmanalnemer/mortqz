@@ -5,7 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("sansmanger/", admin.site.urls),
 
     # ✅ الصفحة الرئيسية (منتجات مميزة / واجهة المتجر)
     path("", include(("catalog.urls", "catalog"), namespace="catalog")),

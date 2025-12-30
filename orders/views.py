@@ -20,8 +20,6 @@ def home(request: HttpRequest):
         Product.objects.filter(is_active=True)
         .order_by("-is_featured", "-updated_at", "-id")[:12]
     )
-
-    # ✅ لو قالبك الأساسي اسمه catalog_home.html استخدمه
     return render(request, "catalog_home.html", {"featured_products": featured_products})
 
 
@@ -228,6 +226,13 @@ def cart_detail(request: HttpRequest):
 @require_POST
 @transaction.atomic
 def cart_update(request: HttpRequest, item_id: int):
+    """
+    ✅ تحديث الكمية مع معالجة المخزون بشكل ذكي:
+    - إذا كانت الكمية المطلوبة أكبر من المتاح:
+      نضبطها تلقائياً للحد المتاح ونرجع رسالة (بدل ok:false).
+    - إذا المخزون = 0:
+      نرجع خطأ واضح (out_of_stock) لكي تحذف العنصر.
+    """
     cart = _get_or_create_cart(request)
     Cart.objects.select_for_update().filter(pk=cart.pk).exists()
 
@@ -239,24 +244,32 @@ def cart_update(request: HttpRequest, item_id: int):
 
     qty_raw = (request.POST.get("quantity") or "").strip()
     try:
-        quantity = int(qty_raw)
+        requested_qty = int(qty_raw)
     except ValueError:
         return JsonResponse({"ok": False, "error": "قيمة الكمية غير صحيحة."}, status=400)
 
-    if quantity < 1 or quantity > 999:
+    if requested_qty < 1 or requested_qty > 999:
         return JsonResponse({"ok": False, "error": "الكمية يجب أن تكون بين 1 و 999."}, status=400)
 
-    if item.variant_id:
-        track, stock = _get_stock_info(item.variant)
-        if track and quantity > stock:
-            return JsonResponse({"ok": False, "error": "الكمية المطلوبة غير متوفرة بالمخزون."}, status=400)
+    # تحديد كائن المخزون
+    stock_obj = item.variant if item.variant_id else item.product
+    track, stock = _get_stock_info(stock_obj) if stock_obj else (False, 0)
 
-    if item.product_id:
-        track, stock = _get_stock_info(item.product)
-        if track and quantity > stock:
-            return JsonResponse({"ok": False, "error": "الكمية المطلوبة غير متوفرة بالمخزون."}, status=400)
+    adjusted = False
+    final_qty = requested_qty
 
-    item.quantity = quantity
+    if track:
+        if stock <= 0:
+            msg = "هذا المنتج أصبح غير متوفر. فضلاً احذفه من السلة."
+            if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+                return JsonResponse({"ok": False, "error": msg, "out_of_stock": True}, status=400)
+            return redirect("orders:cart_detail")
+
+        if requested_qty > stock:
+            final_qty = stock
+            adjusted = True
+
+    item.quantity = final_qty
     item.save(update_fields=["quantity", "updated_at"])
 
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -265,15 +278,17 @@ def cart_update(request: HttpRequest, item_id: int):
         unit_price, _cur = _item_unit_price_and_currency(item)
         line_total = unit_price * item.quantity
 
-        return JsonResponse(
-            {
-                "ok": True,
-                "cart_count": cart_count,
-                "subtotal": str(subtotal),
-                "currency": currency,
-                "item": {"id": item.id, "quantity": item.quantity, "line_total": str(line_total)},
-            }
-        )
+        payload = {
+            "ok": True,
+            "cart_count": cart_count,
+            "subtotal": str(subtotal),
+            "currency": currency,
+            "item": {"id": item.id, "quantity": item.quantity, "line_total": str(line_total)},
+        }
+        if adjusted:
+            payload["adjusted"] = True
+            payload["message"] = f"تم تعديل الكمية إلى الحد المتاح ({final_qty})."
+        return JsonResponse(payload)
 
     return redirect("orders:cart_detail")
 

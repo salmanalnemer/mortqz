@@ -12,6 +12,10 @@
       --text:#213448; --muted:#5B7284; --border:#E6EEF4;
       --shadow:0 14px 30px rgba(33,52,72,.10);
       --radius:18px;
+
+      --dangerBg: rgba(231, 76, 60, .10);
+      --dangerBd: rgba(231, 76, 60, .20);
+      --dangerTx: rgba(140, 30, 20, .95);
     }
 
     body{
@@ -54,6 +58,33 @@
       border-bottom: 1px solid var(--border);
       font-weight:1000;
       display:flex; justify-content:space-between; align-items:center; gap:10px;
+    }
+
+    /* تنبيه أعلى الصفحة */
+    .toast{
+      display:none;
+      margin: 0 0 12px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 10px 22px rgba(33,52,72,.06);
+      line-height: 1.8;
+      font-size: 13px;
+    }
+    .toast.show{ display:block; }
+    .toast.error{
+      background: var(--dangerBg);
+      border-color: var(--dangerBd);
+      color: var(--dangerTx);
+    }
+    .toast.ok{
+      background: rgba(46, 204, 113, .10);
+      border-color: rgba(46, 204, 113, .20);
+      color: rgba(14, 90, 48, .95);
+    }
+    .toast .actions{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;
     }
 
     .items{ padding: 10px; display:flex; flex-direction:column; gap:10px; }
@@ -105,6 +136,7 @@
       font-weight:1000;
       color:var(--text);
     }
+
     .btn{
       border:0;
       cursor:pointer;
@@ -114,16 +146,21 @@
       background: #fff;
       border:1px solid var(--border);
     }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
     .btn.primary{
       background: linear-gradient(135deg, var(--c2), var(--c3));
       color:#fff;
       border-color: rgba(84,119,146,.18);
     }
     .btn.danger{
-      background: rgba(231, 76, 60, .10);
-      color: rgba(140, 30, 20, .95);
-      border: 1px solid rgba(231, 76, 60, .20);
+      background: var(--dangerBg);
+      color: var(--dangerTx);
+      border: 1px solid var(--dangerBd);
     }
+    .btn.small{ padding:8px 10px; border-radius: 12px; font-size: 13px; }
 
     .summary{ padding: 12px; }
     .sum-box{
@@ -158,29 +195,28 @@
 <body>
   {% include "header.html" %}
 
-  {# ✅ يحاول يجلب رابط catalog:home بدون كسر الصفحة إذا غير موجود #}
+  {# ✅ الرابط الصحيح للرئيسية عندك هو catalog:home #}
   {% url 'catalog:home' as catalog_home_url %}
-  {% if not catalog_home_url %}
-    {% url 'shop:home' as catalog_home_url %}
-  {% endif %}
-  {% if not catalog_home_url %}
-    {% url 'shop:catalog_home' as catalog_home_url %}
-  {% endif %}
-  {% if not catalog_home_url %}
-    {% with "/" as catalog_home_url %}{% endwith %}
-  {% endif %}
 
   <main class="wrap">
+
+    <!-- ✅ صندوق رسائل: يظهر عند خطأ (مثل المخزون) أو نجاح -->
+    <div id="toast" class="toast" role="status" aria-live="polite">
+      <div id="toastMsg"></div>
+      <div class="actions" id="toastActions" style="display:none;"></div>
+    </div>
+
     <div class="page-head">
       <div>
         <h1>سلة التسوق</h1>
-        <p>عدد العناصر: <strong>{{ cart_count }}</strong></p>
+        <p>عدد العناصر: <strong id="cartCountText">{{ cart_count }}</strong></p>
       </div>
 
       <a class="btn" href="{{ catalog_home_url|default:'/' }}">متابعة التسوق</a>
     </div>
 
     <div class="grid">
+      <!-- قائمة العناصر -->
       <section class="card" aria-label="عناصر السلة">
         <div class="hd">
           <span>العناصر</span>
@@ -188,7 +224,7 @@
         </div>
 
         {% if items %}
-          <div class="items">
+          <div class="items" id="cartItems">
             {% for it in items %}
               <article class="item" data-item-id="{{ it.id }}">
                 <div class="thumb"
@@ -206,32 +242,25 @@
                   <div class="row">
                     <div>
                       <div class="price">{{ it.unit_price }} {{ currency }}</div>
-                      <div class="muted">الإجمالي: <strong>{{ it.line_total }} {{ currency }}</strong></div>
+                      <div class="muted">
+                        الإجمالي:
+                        <strong id="lineTotal-{{ it.id }}">{{ it.line_total }}</strong> {{ currency }}
+                      </div>
                     </div>
 
                     <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
 
-                      {# ✅ نفس فكرة الحماية لروابط update/remove #}
-                      {% url 'orders:cart_update' it.id as upd_url %}
-                      {% url 'orders:cart_remove' it.id as rm_url %}
-
-                      <form method="post" action="{{ upd_url|default:'#' }}">
+                      <form class="js-update" method="post" action="{% url 'orders:cart_update' it.id %}">
                         {% csrf_token %}
                         <div class="qty">
                           <input name="quantity" type="number" min="1" max="999" value="{{ it.quantity }}" />
-                          <button class="btn primary" type="submit" {% if not upd_url %}disabled{% endif %}>تحديث</button>
+                          <button class="btn primary" type="submit">تحديث</button>
                         </div>
-                        {% if not upd_url %}
-                          <div class="muted" style="margin-top:6px;">تنبيه: رابط تحديث السلة غير معرف في urls.py</div>
-                        {% endif %}
                       </form>
 
-                      <form method="post" action="{{ rm_url|default:'#' }}">
+                      <form class="js-remove" method="post" action="{% url 'orders:cart_remove' it.id %}">
                         {% csrf_token %}
-                        <button class="btn danger" type="submit" {% if not rm_url %}disabled{% endif %}>حذف</button>
-                        {% if not rm_url %}
-                          <div class="muted" style="margin-top:6px;">تنبيه: رابط حذف السلة غير معرف في urls.py</div>
-                        {% endif %}
+                        <button class="btn danger" type="submit">حذف</button>
                       </form>
 
                     </div>
@@ -241,20 +270,21 @@
             {% endfor %}
           </div>
         {% else %}
-          <div class="empty">
+          <div class="empty" id="emptyState">
             سلتك فارغة حالياً.<br/>
             ابدأ بإضافة منتجات من الصفحة الرئيسية.
           </div>
         {% endif %}
       </section>
 
+      <!-- الملخص -->
       <aside class="card" aria-label="ملخص السلة">
         <div class="hd">الملخص</div>
         <div class="summary">
           <div class="sum-box">
             <div class="sum-row">
               <span>المجموع الفرعي</span>
-              <strong>{{ subtotal }} {{ currency }}</strong>
+              <strong><span id="subtotalText">{{ subtotal }}</span> {{ currency }}</strong>
             </div>
 
             <div class="sum-row">
@@ -264,7 +294,7 @@
 
             <div class="sum-row" style="border-top:1px dashed var(--border); padding-top:10px;">
               <span>الإجمالي المتوقع</span>
-              <strong>{{ subtotal }} {{ currency }}</strong>
+              <strong><span id="totalText">{{ subtotal }}</span> {{ currency }}</strong>
             </div>
 
             <div class="sum-actions">
@@ -282,5 +312,181 @@
   </main>
 
   {% include "footer.html" %}
+
+  <script>
+    // ✅ حماية XSS بسيطة لرسائل التوست
+    function escapeHtml(s){
+      return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+      }[c]));
+    }
+
+    function showToast(type, msg, actions){
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toastMsg");
+      const toastActions = document.getElementById("toastActions");
+
+      toast.className = "toast show " + (type || "");
+      toastMsg.innerHTML = escapeHtml(msg || "");
+
+      toastActions.innerHTML = "";
+      if (actions && actions.length){
+        toastActions.style.display = "flex";
+        actions.forEach(a => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn small " + (a.variant || "");
+          btn.textContent = a.label;
+          btn.onclick = a.onClick;
+          toastActions.appendChild(btn);
+        });
+      } else {
+        toastActions.style.display = "none";
+      }
+
+      // إخفاء تلقائي بعد مدة
+      window.clearTimeout(showToast._t);
+      showToast._t = window.setTimeout(() => {
+        toast.classList.remove("show");
+      }, 4500);
+    }
+
+    function getCsrfToken(){
+      const input = document.querySelector("input[name=csrfmiddlewaretoken]");
+      return input ? input.value : "";
+    }
+
+    async function postForm(url, form){
+      const fd = new FormData(form);
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRFToken": getCsrfToken(),
+        },
+        body: fd,
+        credentials: "same-origin",
+      });
+
+      let data = null;
+      try { data = await res.json(); } catch(e) {}
+      return { ok: res.ok, status: res.status, data };
+    }
+
+    function updateSummaryUI(payload){
+      if (!payload) return;
+      if (payload.cart_count != null){
+        const el = document.getElementById("cartCountText");
+        if (el) el.textContent = payload.cart_count;
+      }
+      if (payload.subtotal != null){
+        const s = document.getElementById("subtotalText");
+        const t = document.getElementById("totalText");
+        if (s) s.textContent = payload.subtotal;
+        if (t) t.textContent = payload.subtotal;
+      }
+      if (payload.item && payload.item.id != null){
+        const lt = document.getElementById("lineTotal-" + payload.item.id);
+        if (lt && payload.item.line_total != null) lt.textContent = payload.item.line_total;
+        // إذا السيرفر عدّل الكمية (adjusted) نحدث قيمة input
+        if (payload.item.quantity != null){
+          const row = document.querySelector(`.item[data-item-id="${payload.item.id}"] input[name="quantity"]`);
+          if (row) row.value = payload.item.quantity;
+        }
+      }
+    }
+
+    function removeItemFromUI(itemId){
+      const el = document.querySelector(`.item[data-item-id="${itemId}"]`);
+      if (el) el.remove();
+
+      // لو ما بقي عناصر نعرض empty
+      const container = document.getElementById("cartItems");
+      if (container && container.children.length === 0){
+        container.remove();
+        const sec = document.querySelector('section[aria-label="عناصر السلة"]');
+        if (sec){
+          const empty = document.createElement("div");
+          empty.className = "empty";
+          empty.id = "emptyState";
+          empty.innerHTML = "سلتك فارغة حالياً.<br/>ابدأ بإضافة منتجات من الصفحة الرئيسية.";
+          sec.appendChild(empty);
+        }
+      }
+    }
+
+    // ✅ تحديث (AJAX)
+    document.querySelectorAll("form.js-update").forEach((form) => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const url = form.getAttribute("action");
+        const article = form.closest(".item");
+        const itemId = article ? article.getAttribute("data-item-id") : null;
+
+        const { ok, data } = await postForm(url, form);
+
+        // نجاح
+        if (ok && data && data.ok){
+          updateSummaryUI(data);
+
+          if (data.adjusted){
+            showToast("error", data.message || "تم تعديل الكمية إلى الحد المتاح.", [
+              { label: "حسنًا", variant: "", onClick: () => document.getElementById("toast").classList.remove("show") }
+            ]);
+          } else {
+            showToast("ok", "تم تحديث الكمية بنجاح.");
+          }
+          return;
+        }
+
+        // فشل بسبب مخزون أو غيره
+        const err = (data && data.error) ? data.error : "حدث خطأ أثناء تحديث السلة.";
+        if (data && data.out_of_stock && itemId){
+          showToast("error", err, [
+            {
+              label: "حذف العنصر",
+              variant: "danger",
+              onClick: async () => {
+                const rmForm = article ? article.querySelector("form.js-remove") : null;
+                if (!rmForm) return;
+                const rmUrl = rmForm.getAttribute("action");
+                const { ok: ok2, data: data2 } = await postForm(rmUrl, rmForm);
+                if (ok2 && data2 && data2.ok){
+                  removeItemFromUI(itemId);
+                  updateSummaryUI(data2);
+                  showToast("ok", "تم حذف العنصر من السلة.");
+                } else {
+                  showToast("error", (data2 && data2.error) ? data2.error : "تعذر حذف العنصر.");
+                }
+              }
+            },
+            { label: "إغلاق", variant: "", onClick: () => document.getElementById("toast").classList.remove("show") }
+          ]);
+        } else {
+          showToast("error", err);
+        }
+      });
+    });
+
+    // ✅ حذف (AJAX)
+    document.querySelectorAll("form.js-remove").forEach((form) => {
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const url = form.getAttribute("action");
+        const article = form.closest(".item");
+        const itemId = article ? article.getAttribute("data-item-id") : null;
+
+        const { ok, data } = await postForm(url, form);
+
+        if (ok && data && data.ok){
+          if (itemId) removeItemFromUI(itemId);
+          updateSummaryUI(data);
+          showToast("ok", "تم حذف العنصر من السلة.");
+        } else {
+          showToast("error", (data && data.error) ? data.error : "تعذر حذف العنصر.");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
