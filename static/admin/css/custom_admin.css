@@ -1,0 +1,309 @@
+/* =========================================================
+   Django Admin - Clean Light SaaS (RTL) + Tajawal (V2)
+   Path: static/css/custom_admin.css
+   ========================================================= */
+
+/* خط عربي واضح */
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800&display=swap");
+
+:root{
+  /* خلفية أهدأ */
+  --bg:#f4f7fb;
+  --surface:#ffffff;
+  --surface2:#f0f4f8;
+
+  /* تباين أعلى للكلمات */
+  --text:#0a1220;
+  --muted:#415366;
+
+  /* حدود أوضح */
+  --line:#e3ebf6;
+  --line2:#d2def0;
+
+  /* براند جديد (Indigo + Teal) */
+  --brand:#4f46e5;    /* Indigo 600 */
+  --brand2:#14b8a6;   /* Teal 500 */
+  --ok:#16a34a;
+  --danger:#ef4444;
+
+  --radius:16px;
+  --radius2:12px;
+
+  --shadow: 0 18px 44px rgba(10,18,32,.09);
+  --shadow2: 0 10px 22px rgba(10,18,32,.06);
+
+  --focus: 0 0 0 4px rgba(79,70,229,.18);
+}
+
+/* عام */
+html, body{
+  font-family: "Tajawal", system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif !important;
+  background:
+    radial-gradient(900px 520px at 15% 10%, rgba(79,70,229,.11), transparent 56%),
+    radial-gradient(900px 520px at 90% 10%, rgba(20,184,166,.10), transparent 56%),
+    var(--bg);
+  color: var(--text);
+}
+
+/* شريط علوي أنظف */
+#header{
+  background: linear-gradient(90deg, #3730a3, #14b8a6) !important;
+  border-bottom: 1px solid rgba(255,255,255,.22) !important;
+}
+#header, #header a, #header #site-name a{
+  color:#ffffff !important;
+}
+#site-name a{
+  font-weight: 900 !important;
+  letter-spacing: .2px;
+}
+#user-tools, #user-tools a{ color:#fff !important; opacity:.96; font-weight: 700; }
+#user-tools a:hover{ opacity:1; text-decoration: underline; }
+
+/* breadcrumbs (أوضح) */
+.breadcrumbs{
+  background: rgba(255,255,255,.86) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius2) !important;
+  box-shadow: var(--shadow2);
+  padding: 10px 14px !important;
+  font-weight: 700;
+}
+.breadcrumbs a{
+  color: #2f2acb !important; /* Indigo داكن */
+  font-weight: 800;
+}
+.breadcrumbs a:hover{ text-decoration: underline; }
+.breadcrumbs strong{
+  color: var(--text) !important;
+  font-weight: 900;
+}
+
+/* بطاقات Django */
+.module, fieldset.module, .dashboard .module, .inline-group{
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow2);
+}
+
+/* عناوين البطاقات (أغمق) */
+.module h2, .module caption, fieldset.module h2{
+  background: linear-gradient(180deg, #ffffff, var(--surface2)) !important;
+  border-bottom: 1px solid var(--line) !important;
+  color: var(--text) !important;
+  font-weight: 900 !important;
+}
+
+/* الروابط */
+a{ color: var(--brand); font-weight: 700; }
+a:hover{ color:#3730a3; }
+
+/* مدخلات (وضوح أعلى) */
+input[type="text"], input[type="password"], input[type="email"], input[type="url"],
+input[type="number"], input[type="search"], textarea, select{
+  border: 1px solid var(--line2) !important;
+  border-radius: 12px !important;
+  padding: 10px 12px !important;
+  background: #fff !important;
+  color: var(--text) !important;
+}
+input::placeholder, textarea::placeholder{ color: rgba(65,83,102,.75) !important; }
+input:focus, textarea:focus, select:focus{
+  outline: none !important;
+  box-shadow: var(--focus) !important;
+  border-color: rgba(79,70,229,.55) !important;
+}
+
+/* أزرار (أوضح + SaaS) */
+.button, input[type="submit"], input[type="button"], .submit-row input, .object-tools a{
+  border-radius: 12px !important;
+  font-weight: 900 !important;
+  border: 1px solid rgba(79,70,229,.28) !important;
+  background: linear-gradient(180deg, #ffffff, rgba(79,70,229,.06)) !important;
+  color: #3730a3 !important;
+}
+.button:hover, .object-tools a:hover{
+  background: linear-gradient(180deg, #ffffff, rgba(79,70,229,.10)) !important;
+  border-color: rgba(79,70,229,.40) !important;
+}
+
+/* زر أساسي */
+.submit-row input.default{
+  background: linear-gradient(90deg, #4f46e5, #14b8a6) !important;
+  color:#fff !important;
+  border: 0 !important;
+  box-shadow: 0 10px 22px rgba(79,70,229,.18);
+}
+.submit-row input.default:hover{
+  filter: brightness(1.03);
+}
+
+/* جدول القائمة */
+#changelist .results, #result_list{
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow2);
+}
+#result_list thead th{
+  background: linear-gradient(180deg, #fff, var(--surface2)) !important;
+  color: var(--text) !important;
+  border-bottom: 1px solid var(--line) !important;
+  font-weight: 900 !important;
+}
+#result_list tbody td, #result_list tbody th{
+  border-bottom: 1px solid rgba(10,18,32,.07) !important;
+  color: var(--text) !important;
+  font-weight: 600;
+}
+#result_list tbody tr:hover{
+  background: rgba(79,70,229,.045) !important;
+}
+
+/* فلاتر اليسار */
+#changelist-filter{
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow2);
+}
+#changelist-filter h2{
+  background: linear-gradient(90deg, rgba(79,70,229,.10), rgba(20,184,166,.09)) !important;
+  border-bottom: 1px solid var(--line) !important;
+  color: var(--text) !important;
+  font-weight: 900 !important;
+}
+#changelist-filter a{
+  color: var(--text) !important;
+  font-weight: 700;
+  opacity: .92;
+}
+#changelist-filter a:hover{ opacity: 1; }
+
+/* =========================================================
+   Sidebar (Accordion) - واضح ومقروء
+   ========================================================= */
+#nav-sidebar.x-sidebar{
+  direction: rtl;
+  background: rgba(255,255,255,.90);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px;
+  margin: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.admin-sidebar-compat{ display:none !important; }
+
+.x-sidebar__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:12px;
+  border-bottom: 1px solid var(--line);
+}
+.x-sidebar__title{
+  font-weight: 900;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.x-sidebar__collapse{
+  border: 1px solid var(--line2);
+  background: #fff;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor:pointer;
+  font-weight: 900;
+}
+.x-sidebar__collapse:hover{
+  background: rgba(79,70,229,.07);
+  border-color: rgba(79,70,229,.28);
+}
+
+/* Accordion items */
+.x-accordion{
+  margin-top: 12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.x-acc-item{
+  border: 1px solid rgba(10,18,32,.09);
+  border-radius: 14px;
+  overflow:hidden;
+  background: #fff;
+}
+
+.x-acc-btn{
+  width:100%;
+  border:0;
+  cursor:pointer;
+  padding: 12px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  color: var(--text);
+  font-weight: 900;
+  background: linear-gradient(180deg, #fff, var(--surface2));
+}
+.x-acc-btn:hover{
+  background: linear-gradient(180deg, #fff, rgba(79,70,229,.06));
+}
+.x-acc-icon{
+  transition: transform .2s ease;
+  opacity:.78;
+}
+
+/* panel */
+.x-acc-panel{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .25s ease;
+}
+.x-acc-item.is-open .x-acc-panel{ max-height: 520px; }
+.x-acc-item.is-open .x-acc-icon{ transform: rotate(180deg); }
+
+/* links */
+.x-acc-list{
+  list-style:none;
+  margin:0;
+  padding: 10px 12px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.x-acc-link a{
+  display:block;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(10,18,32,.11);
+  background: #fff;
+  color: var(--text);
+  text-decoration:none;
+  font-weight: 800;
+}
+.x-acc-link a:hover{
+  background: rgba(79,70,229,.07);
+  border-color: rgba(79,70,229,.24);
+}
+.x-acc-link a.is-active{
+  background: linear-gradient(90deg, rgba(79,70,229,.16), rgba(20,184,166,.12));
+  border-color: rgba(79,70,229,.30);
+}
+
+/* غير مرتبط */
+.x-muted{
+  color: var(--muted);
+  display:block;
+  padding: 10px 12px;
+  font-weight: 700;
+}

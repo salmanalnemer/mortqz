@@ -1,0 +1,63 @@
+{% load i18n %}
+
+
+
+<nav id="nav-sidebar" class="x-sidebar" aria-label="{% translate 'Sidebar' %}">
+
+  {# عناصر Django المتوقعة (نخليها موجودة للتوافق) #}
+  <div class="admin-sidebar-compat" aria-hidden="true">
+    <button type="button" id="toggle-nav-sidebar" class="button">
+      {% translate "Toggle navigation" %}
+    </button>
+
+    <div class="nav-sidebar__filter">
+      <input id="nav-filter" type="search" placeholder="{% translate 'Filter navigation items' %}">
+    </div>
+  </div>
+
+  <!-- رأس السايدبار -->
+  <div class="x-sidebar__head">
+    <div class="x-sidebar__title">{% translate "التطبيقات" %}</div>
+    <button type="button" class="x-sidebar__collapse" data-action="collapse-all">
+      {% translate "طي الكل" %}
+    </button>
+  </div>
+
+  <!-- التطبيقات -->
+  {% if available_apps %}
+    <div class="x-accordion" data-x-accordion>
+
+      {% for app in available_apps %}
+        <section class="x-acc-item" data-x-item>
+
+          <button type="button"
+                  class="x-acc-btn"
+                  data-x-toggle
+                  aria-expanded="false">
+            <span class="x-acc-name">{{ app.name }}</span>
+            <span class="x-acc-icon" aria-hidden="true">▾</span>
+          </button>
+
+          <div class="x-acc-panel">
+            <ul class="x-acc-list">
+              {% for model in app.models %}
+                <li class="x-acc-link">
+                  {% if model.admin_url %}
+                    <a href="{{ model.admin_url }}">{{ model.name }}</a>
+                  {% else %}
+                    <span class="x-muted">{{ model.name }}</span>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+        </section>
+      {% endfor %}
+
+    </div>
+  {% else %}
+    <div class="x-empty">{% translate "لا توجد تطبيقات." %}</div>
+  {% endif %}
+
+</nav>
