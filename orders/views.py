@@ -38,7 +38,7 @@ def _get_or_create_cart(request: HttpRequest) -> Cart:
     cart, _ = Cart.objects.get_or_create(user=None, session_key=session_key)
     return cart
 
-
+  # وظائف مساعدة داخلية
 def _cart_items_count(cart: Cart) -> int:
     """
     مجموع الكميات في السلة (quantity).
@@ -56,17 +56,22 @@ def _get_stock_info(obj) -> tuple[bool, int]:
 
 
 def _item_unit_price_and_currency(item: CartItem) -> tuple[Decimal, str]:
+    # تحديد سعر الوحدة والعملة للعنصر
     if item.variant_id:
         return (item.variant.price or Decimal("0.00"), item.variant.currency or "SAR")
+    #   تحديد سعر الوحدة والعملة للعنصر
     if item.product_id:
+    #   تحديد سعر الوحدة والعملة للعنصر
         return (item.product.price or Decimal("0.00"), item.product.currency or "SAR")
     return (Decimal("0.00"), "SAR")
 
 
 def _item_title(item: CartItem) -> str:
+    # تحديد عنوان العنصر في السلة
     if item.variant_id:
         v = item.variant
         label = v.title or v.sku or ""
+        #   إرجاع اسم المنتج مع تسمية المتغير إذا وجدت
         return f"{v.product.name} - {label}" if label else v.product.name
     if item.product_id:
         return item.product.name
@@ -82,6 +87,7 @@ def _item_image_url(item: CartItem) -> str:
 
 
 def _calc_cart_subtotal(cart: Cart) -> tuple[Decimal, str]:
+    # حساب المجموع الفرعي للسلة
     items_qs = cart.items.select_related("product", "variant", "variant__product").all()
     subtotal = Decimal("0.00")
     currency = "SAR"

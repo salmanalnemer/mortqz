@@ -146,10 +146,7 @@
       background: #fff;
       border:1px solid var(--border);
     }
-    .btn:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-    }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
     .btn.primary{
       background: linear-gradient(135deg, var(--c2), var(--c3));
       color:#fff;
@@ -186,6 +183,23 @@
       line-height:1.9;
     }
 
+    /* ✅ شاشة تجهيز الجلسة */
+    .session-gate{
+      padding: 18px;
+      text-align:center;
+      color: var(--muted);
+      line-height:1.9;
+    }
+    .spinner{
+      width:34px; height:34px;
+      border-radius:50%;
+      border: 3px solid rgba(84,119,146,.25);
+      border-top-color: rgba(84,119,146,.85);
+      margin: 0 auto 10px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
     @media(max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
     }
@@ -195,12 +209,18 @@
 <body>
   {% include "header.html" %}
 
-  {# ✅ الرابط الصحيح للرئيسية عندك هو catalog:home #}
   {% url 'catalog:home' as catalog_home_url %}
 
-  <main class="wrap">
+  {# ✅ شرط إظهار السلة: إما مستخدم مسجل أو تم إنشاء session_key #}
+  {% with has_session=request.session.session_key %}
+  {% with can_show_cart=request.user.is_authenticated|yesno:"1,0" %}
+    {% if has_session %}
+      {% with can_show_cart="1" %}{% endwith %}
+    {% endif %}
+  {% endwith %}
+  {% endwith %}
 
-    <!-- ✅ صندوق رسائل: يظهر عند خطأ (مثل المخزون) أو نجاح -->
+  <main class="wrap">
     <div id="toast" class="toast" role="status" aria-live="polite">
       <div id="toastMsg"></div>
       <div class="actions" id="toastActions" style="display:none;"></div>
@@ -211,7 +231,6 @@
         <h1>سلة التسوق</h1>
         <p>عدد العناصر: <strong id="cartCountText">{{ cart_count }}</strong></p>
       </div>
-
       <a class="btn" href="{{ catalog_home_url|default:'/' }}">متابعة التسوق</a>
     </div>
 
@@ -223,56 +242,68 @@
           <span class="muted">تحكم بالكميات والحذف</span>
         </div>
 
-        {% if items %}
-          <div class="items" id="cartItems">
-            {% for it in items %}
-              <article class="item" data-item-id="{{ it.id }}">
-                <div class="thumb"
-                     {% if it.image_url %}
-                       style="background-image:url('{{ it.image_url }}')"
-                     {% endif %}
-                     aria-hidden="true"></div>
+        {# ✅ إذا ما فيه جلسة ولا تسجيل دخول: لا نعرض العناصر إطلاقاً #}
+        {% if request.user.is_authenticated or request.session.session_key %}
 
-                <div class="meta">
-                  <div class="title">{{ it.title }}</div>
-                  {% if it.sku %}
-                    <div class="sku">SKU: {{ it.sku }}</div>
-                  {% endif %}
+          {% if items %}
+            <div class="items" id="cartItems">
+              {% for it in items %}
+                <article class="item" data-item-id="{{ it.id }}">
+                  <div class="thumb"
+                       {% if it.image_url %}
+                         style="background-image:url('{{ it.image_url }}')"
+                       {% endif %}
+                       aria-hidden="true"></div>
 
-                  <div class="row">
-                    <div>
-                      <div class="price">{{ it.unit_price }} {{ currency }}</div>
-                      <div class="muted">
-                        الإجمالي:
-                        <strong id="lineTotal-{{ it.id }}">{{ it.line_total }}</strong> {{ currency }}
+                  <div class="meta">
+                    <div class="title">{{ it.title }}</div>
+                    {% if it.sku %}
+                      <div class="sku">SKU: {{ it.sku }}</div>
+                    {% endif %}
+
+                    <div class="row">
+                      <div>
+                        <div class="price">{{ it.unit_price }} {{ currency }}</div>
+                        <div class="muted">
+                          الإجمالي:
+                          <strong id="lineTotal-{{ it.id }}">{{ it.line_total }}</strong> {{ currency }}
+                        </div>
+                      </div>
+
+                      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+                        <form class="js-update" method="post" action="{% url 'orders:cart_update' it.id %}">
+                          {% csrf_token %}
+                          <div class="qty">
+                            <input name="quantity" type="number" min="1" max="999" value="{{ it.quantity }}" />
+                            <button class="btn primary" type="submit">تحديث</button>
+                          </div>
+                        </form>
+
+                        <form class="js-remove" method="post" action="{% url 'orders:cart_remove' it.id %}">
+                          {% csrf_token %}
+                          <button class="btn danger" type="submit">حذف</button>
+                        </form>
                       </div>
                     </div>
-
-                    <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-
-                      <form class="js-update" method="post" action="{% url 'orders:cart_update' it.id %}">
-                        {% csrf_token %}
-                        <div class="qty">
-                          <input name="quantity" type="number" min="1" max="999" value="{{ it.quantity }}" />
-                          <button class="btn primary" type="submit">تحديث</button>
-                        </div>
-                      </form>
-
-                      <form class="js-remove" method="post" action="{% url 'orders:cart_remove' it.id %}">
-                        {% csrf_token %}
-                        <button class="btn danger" type="submit">حذف</button>
-                      </form>
-
-                    </div>
                   </div>
-                </div>
-              </article>
-            {% endfor %}
-          </div>
+                </article>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty" id="emptyState">
+              سلتك فارغة حالياً.<br/>
+              ابدأ بإضافة منتجات من الصفحة الرئيسية.
+            </div>
+          {% endif %}
+
         {% else %}
-          <div class="empty" id="emptyState">
-            سلتك فارغة حالياً.<br/>
-            ابدأ بإضافة منتجات من الصفحة الرئيسية.
+          <div class="session-gate" id="sessionGate">
+            <div class="spinner" aria-hidden="true"></div>
+            جارٍ تجهيز جلسة المستخدم…<br/>
+            إذا استمرّت، اضغط زر التحديث.
+            <div style="margin-top:10px;">
+              <button class="btn primary" type="button" id="forceReloadBtn">تحديث الصفحة</button>
+            </div>
           </div>
         {% endif %}
       </section>
@@ -314,7 +345,6 @@
   {% include "footer.html" %}
 
   <script>
-    // ✅ حماية XSS بسيطة لرسائل التوست
     function escapeHtml(s){
       return String(s ?? "").replace(/[&<>"']/g, (c) => ({
         "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
@@ -344,11 +374,8 @@
         toastActions.style.display = "none";
       }
 
-      // إخفاء تلقائي بعد مدة
       window.clearTimeout(showToast._t);
-      showToast._t = window.setTimeout(() => {
-        toast.classList.remove("show");
-      }, 4500);
+      showToast._t = window.setTimeout(() => toast.classList.remove("show"), 4500);
     }
 
     function getCsrfToken(){
@@ -367,7 +394,6 @@
         body: fd,
         credentials: "same-origin",
       });
-
       let data = null;
       try { data = await res.json(); } catch(e) {}
       return { ok: res.ok, status: res.status, data };
@@ -388,7 +414,6 @@
       if (payload.item && payload.item.id != null){
         const lt = document.getElementById("lineTotal-" + payload.item.id);
         if (lt && payload.item.line_total != null) lt.textContent = payload.item.line_total;
-        // إذا السيرفر عدّل الكمية (adjusted) نحدث قيمة input
         if (payload.item.quantity != null){
           const row = document.querySelector(`.item[data-item-id="${payload.item.id}"] input[name="quantity"]`);
           if (row) row.value = payload.item.quantity;
@@ -400,7 +425,6 @@
       const el = document.querySelector(`.item[data-item-id="${itemId}"]`);
       if (el) el.remove();
 
-      // لو ما بقي عناصر نعرض empty
       const container = document.getElementById("cartItems");
       if (container && container.children.length === 0){
         container.remove();
@@ -415,6 +439,14 @@
       }
     }
 
+    // ✅ زر تحديث الجلسة (لو كانت الصفحة تخفي العناصر)
+    const reloadBtn = document.getElementById("forceReloadBtn");
+    if (reloadBtn){
+      reloadBtn.addEventListener("click", () => location.reload());
+      // محاولة إعادة تحميل تلقائية مرة واحدة بعد قليل (قد تكون الجلسة اتنشأت الآن)
+      setTimeout(() => location.reload(), 1200);
+    }
+
     // ✅ تحديث (AJAX)
     document.querySelectorAll("form.js-update").forEach((form) => {
       form.addEventListener("submit", async (e) => {
@@ -425,13 +457,11 @@
 
         const { ok, data } = await postForm(url, form);
 
-        // نجاح
         if (ok && data && data.ok){
           updateSummaryUI(data);
-
           if (data.adjusted){
             showToast("error", data.message || "تم تعديل الكمية إلى الحد المتاح.", [
-              { label: "حسنًا", variant: "", onClick: () => document.getElementById("toast").classList.remove("show") }
+              { label: "حسنًا", onClick: () => document.getElementById("toast").classList.remove("show") }
             ]);
           } else {
             showToast("ok", "تم تحديث الكمية بنجاح.");
@@ -439,7 +469,6 @@
           return;
         }
 
-        // فشل بسبب مخزون أو غيره
         const err = (data && data.error) ? data.error : "حدث خطأ أثناء تحديث السلة.";
         if (data && data.out_of_stock && itemId){
           showToast("error", err, [
@@ -460,7 +489,7 @@
                 }
               }
             },
-            { label: "إغلاق", variant: "", onClick: () => document.getElementById("toast").classList.remove("show") }
+            { label: "إغلاق", onClick: () => document.getElementById("toast").classList.remove("show") }
           ]);
         } else {
           showToast("error", err);

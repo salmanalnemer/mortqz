@@ -10,7 +10,7 @@ from django.utils import timezone
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
-
+#   نماذج الطلبات: سلة، طلب، عناصر الطلب، دفع، شحنة
 class Cart(models.Model):
     """
     سلة: إما لمستخدم مسجل أو لزائر عبر session_key.
@@ -58,7 +58,7 @@ class Cart(models.Model):
         if not self.user_id and not self.session_key:
             raise ValidationError(_("يجب أن تحتوي السلة على مستخدم أو مفتاح جلسة (session_key)."))
 
-
+# نموذج عنصر السلة
 class CartItem(models.Model):
     cart = models.ForeignKey(
         Cart,
@@ -121,7 +121,7 @@ class CartItem(models.Model):
         ref = self.variant.sku if self.variant_id else f"product:{self.product_id}"
         return f"عنصر سلة ({ref}) × {self.quantity}"
 
-
+# نموذج الطلب
 class Order(models.Model):
     class Status(models.TextChoices):
         DRAFT = "draft", _("مسودة")
@@ -256,7 +256,7 @@ class Order(models.Model):
             computed_total = Decimal("0.00")
         self.total = computed_total
 
-
+# نموذج عنصر الطلب
 class OrderItem(models.Model):
     order = models.ForeignKey(
         Order,
@@ -338,7 +338,7 @@ class OrderItem(models.Model):
     def line_total(self) -> Decimal:
         return self.unit_price * self.quantity
 
-
+# نموذج الدفع
 class Payment(models.Model):
     class Status(models.TextChoices):
         INITIATED = "initiated", _("مبدئي")
@@ -413,7 +413,7 @@ class Payment(models.Model):
     def __str__(self) -> str:
         return f"دفع (طلب={self.order_id}, حالة={self.get_status_display()})"
 
-
+# نموذج الشحنة
 class Shipment(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", _("بانتظار الشحن")

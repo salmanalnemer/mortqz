@@ -1,3 +1,4 @@
+{% load static %}
 <!-- catalog_home.html (Editorial / Magazine Style - VERY DIFFERENT) -->
 <!doctype html>
 <html lang="ar" dir="rtl">
@@ -97,44 +98,29 @@
     }
     .cta:hover{ filter: brightness(1.03); }
 
-    /* ===== Editorial Hero ===== */
+    /* ===== Editorial Hero (SIMPLIFIED) ===== */
     .editorial{
       margin-top: 14px;
       display:grid;
-      grid-template-columns: 1.35fr .65fr;
+      grid-template-columns: 1.5fr 1fr;
       gap: 12px;
       align-items: stretch;
     }
 
     .feature{
       border: 1px solid var(--line);
-      border-radius: 26px;
+      border-radius: 22px;
       overflow:hidden;
-      background:
-        radial-gradient(circle at 18% 20%, rgba(20,184,166,.22), transparent 55%),
-        radial-gradient(circle at 86% 25%, rgba(44,78,168,.18), transparent 55%),
-        linear-gradient(135deg, rgba(255,255,255,.92), rgba(243,246,251,.88));
+      background: rgba(255,255,255,.92);
       box-shadow: var(--shadow);
-      position: relative;
-      min-height: 260px;
+      min-height: 240px;
       display:flex;
       flex-direction:column;
-      justify-content:flex-end;
-    }
-
-    .feature::before{
-      content:"";
-      position:absolute;
-      inset: 0;
-      background:
-        radial-gradient(900px 520px at 80% 35%, rgba(11,18,32,.18), transparent 55%);
-      opacity:.22;
-      pointer-events:none;
+      justify-content:center;
     }
 
     .feature-content{
-      position: relative;
-      padding: 20px;
+      padding: 18px;
       display:flex;
       flex-direction:column;
       gap: 10px;
@@ -147,7 +133,7 @@
       width: fit-content;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,.82);
+      background: var(--card2);
       border: 1px solid var(--line);
       font-size: 12px;
       font-weight: 1000;
@@ -156,8 +142,8 @@
 
     .feature h2{
       margin:0;
-      font-size: 28px;
-      line-height: 1.15;
+      font-size: 24px;
+      line-height: 1.25;
       font-weight: 1000;
       letter-spacing:.2px;
       color: var(--ink);
@@ -186,7 +172,7 @@
       padding: 11px 13px;
       border-radius: 14px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,.92);
+      background: #fff;
       color: rgba(11,18,32,.92);
       cursor:pointer;
       font-weight: 1000;
@@ -194,10 +180,10 @@
       user-select:none;
     }
     .btn.primary{
-      background: linear-gradient(135deg, rgba(20,184,166,.95), rgba(31,42,68,.95));
+      background: linear-gradient(135deg, rgba(44,78,168,.95), rgba(31,42,68,.95));
       color:#fff;
-      border-color: rgba(20,184,166,.18);
-      box-shadow: 0 14px 26px rgba(20,184,166,.16);
+      border-color: rgba(44,78,168,.18);
+      box-shadow: 0 14px 26px rgba(44,78,168,.18);
     }
     .btn:hover{ filter: brightness(1.03); }
 
@@ -209,27 +195,15 @@
 
     .mini-card{
       border: 1px solid var(--line);
-      border-radius: 26px;
+      border-radius: 22px;
       background: rgba(255,255,255,.92);
       box-shadow: var(--shadow2);
       padding: 16px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
-      overflow:hidden;
-      position: relative;
-    }
-    .mini-card::after{
-      content:"";
-      position:absolute;
-      inset:-40%;
-      background: radial-gradient(circle at 30% 30%, rgba(44,78,168,.18), transparent 55%);
-      transform: rotate(12deg);
-      opacity:.6;
-      pointer-events:none;
     }
     .mini-card .top{
-      position:relative;
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
@@ -238,7 +212,7 @@
     .mini-card .ico{
       width: 44px; height: 44px;
       border-radius: 16px;
-      background: rgba(243,246,251,.92);
+      background: var(--card2);
       border: 1px solid var(--line);
       display:grid;
       place-items:center;
@@ -247,20 +221,17 @@
       flex:0 0 auto;
     }
     .mini-card .t{
-      position:relative;
       font-weight: 1000;
       font-size: 14px;
       color: rgba(11,18,32,.95);
     }
     .mini-card .d{
-      position:relative;
       margin-top: 6px;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.8;
     }
     .mini-card .foot{
-      position:relative;
       margin-top: 10px;
       display:flex;
       align-items:center;
@@ -287,6 +258,7 @@
       border-radius: 14px;
       border: 1px solid var(--line);
       background: #fff;
+      cursor:pointer;
     }
     .link:hover{ background: var(--card2); }
 
@@ -345,8 +317,8 @@
       height: 110px;
       border-radius: 14px;
       background:
-        radial-gradient(circle at 25% 25%, rgba(20,184,166,.22), transparent 55%),
-        linear-gradient(135deg, rgba(44,78,168,.22), rgba(243,246,251,.9));
+        radial-gradient(circle at 25% 25%, rgba(20,184,166,.14), transparent 55%),
+        linear-gradient(135deg, rgba(44,78,168,.16), rgba(243,246,251,.9));
       border: 1px solid var(--line);
       margin-bottom: 10px;
     }
@@ -409,7 +381,7 @@
       content:"";
       position:absolute;
       inset:-60%;
-      background: radial-gradient(circle at 30% 30%, rgba(20,184,166,.18), transparent 55%);
+      background: radial-gradient(circle at 30% 30%, rgba(20,184,166,.12), transparent 55%);
       transform: rotate(10deg);
       opacity:.7;
       pointer-events:none;
@@ -489,15 +461,15 @@
       </div>
     </div>
 
-    <!-- EDITORIAL HERO -->
+    <!-- EDITORIAL HERO (SIMPLIFIED) -->
     <section class="editorial" aria-label="قسم المقدمة">
       <article class="feature">
         <div class="feature-content">
           <span class="kicker">اختيار الأسبوع</span>
-          <h2>تجربة تقنية أرقى… بتصميم مختلف</h2>
+          <h2>تجربة تقنية أرقى… بتصميم بسيط</h2>
           <p>
-            واجهة تعرض العروض والمنتجات بأسلوب واضح: بطاقات، قصص قصيرة، وأقسام مرتّبة.
-            ركّز على ما تريد بسرعة وبشكل جميل.
+            واجهة تعرض العروض والمنتجات بأسلوب واضح: بطاقات مرتّبة، تنقّل سريع،
+            وبدون تعقيد — ركّز على ما تريد بسرعة وبشكل جميل.
           </p>
           <div class="feature-actions">
             <a class="btn primary" href="#featured">استكشف المنتجات</a>
@@ -535,40 +507,6 @@
             <a class="link" href="#" data-action="policy">السياسات</a>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- HIGHLIGHTS STRIP -->
-    <section class="highlights" aria-label="أبرز العروض">
-      <div class="high-head">
-        <div>
-          <div class="h">أبرز ما نرشّحه لك</div>
-          <div class="s">قصص سريعة تلخّص عروض وقطع تستحق التجربة</div>
-        </div>
-        <a class="link" href="#featured">عرض الكل</a>
-      </div>
-
-      <div class="strip">
-        <a class="story" href="#featured">
-          <div class="pic"></div>
-          <div class="t">لابتوبات أداء عالي</div>
-          <div class="d">اختيارات عملية للدراسة والبرمجة.</div>
-        </a>
-        <a class="story" href="#featured">
-          <div class="pic"></div>
-          <div class="t">إكسسوارات أساسية</div>
-          <div class="d">شواحن وكوابل بجودة أفضل.</div>
-        </a>
-        <a class="story" href="#featured">
-          <div class="pic"></div>
-          <div class="t">سماعات بسعر ممتاز</div>
-          <div class="d">صوت نقي وتجربة يومية مريحة.</div>
-        </a>
-        <a class="story" href="#featured">
-          <div class="pic"></div>
-          <div class="t">منزل ذكي</div>
-          <div class="d">حلول بسيطة ترفع راحتك.</div>
-        </a>
       </div>
     </section>
 
@@ -792,7 +730,10 @@
             return;
           }
           e.preventDefault();
-          toast('تنبيه', 'زر جاهز ✅ اربطه بصفحة المنتجات لاحقاً.');
+          if(a === 'track') return toast('تتبّع الطلب', 'اربط الزر بصفحة/مودال التتبّع لاحقاً.');
+          if(a === 'support') return toast('الدعم', 'اربط الزر بصفحة الدعم أو واتساب/تذكرة.');
+          if(a === 'policy') return toast('السياسات', 'اربط الزر بصفحة الضمان والاستبدال.');
+          toast('تنبيه', 'زر جاهز ✅ اربطه بصفحة مناسبة لاحقاً.');
         });
       });
 

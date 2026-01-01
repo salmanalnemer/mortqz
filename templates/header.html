@@ -375,7 +375,7 @@
   .toast{
     position: fixed;
     bottom: 78px; /* above bottom nav */
-    inset-inline-end: 18px;
+    inset-inline-end: 18px; /* bottom-right in RTL */
     max-width: 360px;
     background: rgba(255,255,255,.98);
     border: 1px solid var(--line);
@@ -412,8 +412,8 @@
     .brand-badge{ box-shadow:none; }
   }
   @media (max-width: 760px){
-    .topbar{ display:none; } /* noon عادة يخفي الشريط العلوي على الجوال */
-    .cats{ display:none; }   /* نستخدم drawer + bottom nav */
+    .topbar{ display:none; }
+    .cats{ display:none; }
     .bottom-nav{ display:block; }
     .toast{ bottom: 86px; inset-inline: 12px; max-width:none; }
   }
@@ -586,6 +586,16 @@
 
 </header>
 
+{# ===== بيانات الترحيب من الجلسة (بدون JS inline مع Django داخل السكربت) ===== #}
+{% if request.user.is_authenticated %}
+  <div id="welcomeData"
+       data-authed="1"
+       data-name="{{ request.user.get_full_name|default:request.user.username|escape }}"
+       hidden></div>
+{% else %}
+  <div id="welcomeData" data-authed="0" data-name="" hidden></div>
+{% endif %}
+
 <script>
   (function(){
     const header = document.getElementById('mainHeader');
@@ -615,13 +625,14 @@
       return Number.isFinite(n) && n >= 0 ? n : 0;
     }
 
-    function toastShow(title, msg){
+    function toastShow(title, msg, ms){
       if(!toast) return;
       toastTitle.textContent = title || 'تنبيه';
       toastMsg.textContent = msg || '';
       toast.classList.add('show');
       clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+      const dur = (typeof ms === 'number' && ms >= 800) ? ms : 2400;
+      toastTimer = setTimeout(() => toast.classList.remove('show'), dur);
     }
     window.appToast = toastShow;
 
@@ -751,5 +762,28 @@
     }
     forceNavigate('[data-action="login"]');
     forceNavigate('[data-action="signup"]');
+
+    // ===== ✅ ترحيب باسم المستخدم (من الجلسة) كتـوست أسفل الشاشة يمين =====
+    // يظهر مرة واحدة فقط لكل جلسة/متصفح (localStorage).
+    (function welcomeToastOnce(){
+      const dataEl = document.getElementById('welcomeData');
+      if(!dataEl) return;
+
+      const authed = (dataEl.getAttribute('data-authed') || '0') === '1';
+      if(!authed) return;
+
+      const rawName = dataEl.getAttribute('data-name') || '';
+      const name = rawName.trim() || 'مستخدمنا';
+
+      const key = 'welcome_toast_shown_v1';
+      if(localStorage.getItem(key) === '1') return;
+
+      // تأخير بسيط عشان تكون الصفحة جاهزة
+      setTimeout(() => {
+        toastShow('أهلاً وسهلاً 👋', 'مرحباً ' + name + '، سعدنا بعودتك', 3200);
+        try{ localStorage.setItem(key, '1'); }catch(_){}
+      }, 650);
+    })();
+
   })();
 </script>
