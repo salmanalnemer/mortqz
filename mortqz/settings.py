@@ -34,10 +34,9 @@ DEBUG = env_bool("DJANGO_DEBUG", True)
 DJANGO_ENV = env("DJANGO_ENV", "development")
 
 ALLOWED_HOSTS = [
-    h.strip()
-    for h in env("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-    if h.strip()
+    h.strip()for h in env("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")if h.strip()
 ]
+
 
 # ======================================================
 # Applications
