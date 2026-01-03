@@ -34,9 +34,16 @@ DEBUG = env_bool("DJANGO_DEBUG", True)
 DJANGO_ENV = env("DJANGO_ENV", "development")
 
 ALLOWED_HOSTS = [
-    h.strip()for h in env("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")if h.strip()
+    h.strip()
+    for h in env(
+        "DJANGO_ALLOWED_HOSTS",
+        "127.0.0.1,localhost,mortqz.onrender.com",
+    ).split(",")
+    if h.strip()
 ]
 
+ROOT_URLCONF = "mortqz.urls"
+WSGI_APPLICATION = "mortqz.wsgi.application"
 
 # ======================================================
 # Applications
@@ -65,6 +72,10 @@ INSTALLED_APPS = [
 # ======================================================
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+
+    # ⚠️ WhiteNoise MUST be immediately after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -72,11 +83,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", 
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-ROOT_URLCONF = "mortqz.urls"
-WSGI_APPLICATION = "mortqz.wsgi.application"
 
 # ======================================================
 # Templates
@@ -152,14 +159,24 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 # Static & Media
 # ======================================================
 STATIC_URL = "/static/"
-STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # ======================================================
-# Cloudinary
+# Static files handling (WhiteNoise)
+# ======================================================
+STATICFILES_STORAGE = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+)
+
+# ======================================================
+# Cloudinary (Media only)
 # ======================================================
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": env("CLOUDINARY_CLOUD_NAME"),
@@ -167,16 +184,12 @@ CLOUDINARY_STORAGE = {
     "API_SECRET": env("CLOUDINARY_API_SECRET"),
 }
 
-DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+DEFAULT_FILE_STORAGE = (
+    "cloudinary_storage.storage.MediaCloudinaryStorage"
+)
 
-STORAGES = {
-    "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
+# ⚠️ لا نستخدم STORAGES هنا حتى لا نكسر WhiteNoise
+# Django سيستخدم STATICFILES_STORAGE تلقائياً
 
 # ======================================================
 # Security
@@ -187,9 +200,15 @@ CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
 
-CSRF_COOKIE_SECURE = env_bool("DJANGO_CSRF_COOKIE_SECURE", not DEBUG)
-SESSION_COOKIE_SECURE = env_bool("DJANGO_SESSION_COOKIE_SECURE", not DEBUG)
-SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", False)
+CSRF_COOKIE_SECURE = env_bool(
+    "DJANGO_CSRF_COOKIE_SECURE", not DEBUG
+)
+SESSION_COOKIE_SECURE = env_bool(
+    "DJANGO_SESSION_COOKIE_SECURE", not DEBUG
+)
+SECURE_SSL_REDIRECT = env_bool(
+    "DJANGO_SECURE_SSL_REDIRECT", False
+)
 
 if env_bool("DJANGO_SECURE_PROXY_SSL_HEADER", False):
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
