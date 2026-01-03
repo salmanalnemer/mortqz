@@ -1,4 +1,4 @@
-<!-- catalog_home.html (New: Glass + Cards) -->
+<!-- catalog_home.html (NEW RADICAL DESIGN: Split Hero + Tiles + Modern Grid) -->
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -8,484 +8,476 @@
 
   <style>
     :root{
+      /* نفس ألوانك الأساسية */
       --c1:#213448;
       --c2:#547792;
       --c3:#94B4C1;
       --c4:#EAE0CF;
 
-      --bg:#F7FAFC;
-      --surface:#FFFFFF;
-      --glass: rgba(255,255,255,.60);
-      --glass2: rgba(255,255,255,.80);
-      --text:#213448;
+      /* نظام ألوان جديد مختلف جذرياً */
+      --bg: #F6F8FB;
+      --paper: #FFFFFF;
+      --ink: #0F1E2B;
       --muted:#5B7284;
-      --border: rgba(33,52,72,.10);
 
-      --shadow: 0 18px 44px rgba(33,52,72,.10);
-      --shadow2: 0 10px 22px rgba(33,52,72,.08);
-      --radius: 22px;
-      --radius2: 16px;
+      --line: rgba(33,52,72,.10);
+      --line2: rgba(33,52,72,.14);
+
+      --radius: 26px;
+      --radius2: 18px;
+
+      --shadow: 0 24px 70px rgba(33,52,72,.14);
+      --shadow2: 0 16px 38px rgba(33,52,72,.10);
+
+      --chip: rgba(255,255,255,.75);
+      --chip2: rgba(255,255,255,.92);
+      --glass: rgba(255,255,255,.62);
+
+      --gradA: radial-gradient(900px 520px at 92% -10%, rgba(148,180,193,.35), transparent 60%),
+               radial-gradient(820px 520px at 10% 6%, rgba(234,224,207,.55), transparent 55%),
+               radial-gradient(780px 560px at 70% 108%, rgba(84,119,146,.20), transparent 60%),
+               linear-gradient(180deg, var(--bg), #fff 60%);
     }
 
     *{ box-sizing:border-box; }
+    html, body{ height:100%; }
     body{
       margin:0;
-      background:
-        radial-gradient(900px 520px at 90% -10%, rgba(148,180,193,.25), transparent 60%),
-        radial-gradient(900px 520px at 10% 0%, rgba(234,224,207,.40), transparent 55%),
-        radial-gradient(900px 520px at 70% 110%, rgba(84,119,146,.18), transparent 60%),
-        linear-gradient(180deg, var(--bg), #FFFFFF);
-      color: var(--text);
+      background: var(--gradA);
+      color: var(--ink);
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
     }
 
-    a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:1200px; margin:0 auto; padding: 0 16px; }
-    main{ padding: 18px 0 40px; }
+    a{ color: inherit; text-decoration:none; }
+    .wrap{ max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
-    /* ===== Local Top Bar (new) ===== */
-    .topbar{
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      padding: 10px 0;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(247,250,252,.85), rgba(247,250,252,.55));
-      border-bottom: 1px solid var(--border);
+    /* ===== Page spacing under header ===== */
+    main{ padding: 18px 0 48px; }
+
+    /* ===== New HERO ===== */
+    .hero{
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 2px);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,.90));
+      position: relative;
     }
-    .topbar-inner{
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset: -1px;
+      background:
+        radial-gradient(circle at 15% 25%, rgba(234,224,207,.75), transparent 55%),
+        radial-gradient(circle at 88% 15%, rgba(148,180,193,.62), transparent 55%),
+        radial-gradient(circle at 72% 92%, rgba(84,119,146,.20), transparent 62%);
+      pointer-events:none;
+      mix-blend-mode: multiply;
+      opacity: .9;
+    }
+
+    .hero-inner{
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      padding: 22px;
+      align-items: stretch;
+    }
+
+    .hero-left{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.70);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 18px;
+      box-shadow: 0 14px 30px rgba(33,52,72,.08);
       display:flex;
-      align-items:center;
+      flex-direction:column;
       justify-content:space-between;
-      gap: 12px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight: 1000;
-      letter-spacing: .2px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.55);
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 22px rgba(33,52,72,.05);
-    }
-    .brand .dot{
-      width: 12px; height: 12px; border-radius: 999px;
-      background: linear-gradient(135deg, var(--c2), var(--c3));
-      box-shadow: 0 10px 16px rgba(84,119,146,.25);
+      min-height: 320px;
     }
 
-    .search{
-      flex: 1;
-      display:flex;
+    .hero-kicker{
+      display:inline-flex;
       align-items:center;
       gap: 10px;
-      padding: 10px 12px;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.70);
-      border: 1px solid var(--border);
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
-      min-width: 220px;
-    }
-    .search input{
-      width: 100%;
-      border: 0;
-      outline: none;
-      background: transparent;
-      color: var(--text);
-      font-size: 14px;
-    }
-    .search .k{
+      background: rgba(255,255,255,.80);
+      border: 1px solid var(--line);
+      width: fit-content;
+      font-weight: 900;
       font-size: 12px;
-      color: var(--muted);
-      padding: 5px 8px;
-      border-radius: 999px;
-      border: 1px dashed rgba(33,52,72,.18);
-      background: rgba(255,255,255,.60);
-      white-space: nowrap;
+      color: rgba(33,52,72,.92);
+    }
+    .hero-kicker .dot{
+      width: 10px; height: 10px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--c2), var(--c3));
+      box-shadow: 0 10px 18px rgba(84,119,146,.20);
     }
 
-    .quick-actions{
-      display:flex; align-items:center; gap: 8px;
-      flex-wrap: wrap;
+    .hero-title{
+      margin: 14px 0 10px;
+      font-size: 40px;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      font-weight: 1000;
+      color: rgba(33,52,72,.96);
     }
-    .qa{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 10px 12px;
+
+    .hero-desc{
+      margin: 0;
+      color: var(--muted);
+      line-height: 2.0;
+      font-size: 14px;
+      max-width: 64ch;
+    }
+
+    .hero-actions{
+      margin-top: 18px;
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 12px 14px;
       border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.65);
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.85);
+      box-shadow: 0 12px 22px rgba(33,52,72,.08);
       cursor:pointer;
+      font-weight: 1000;
       user-select:none;
-      font-weight: 900;
-      font-size: 13px;
-      white-space: nowrap;
+      transition: transform .16s ease, filter .16s ease;
     }
-    .qa.primary{
+    .btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .btn.primary{
+      border-color: rgba(84,119,146,.18);
       background: linear-gradient(135deg, var(--c2), var(--c3));
       color:#fff;
-      border-color: rgba(84,119,146,.18);
-      box-shadow: 0 12px 22px rgba(84,119,146,.18);
-    }
-    .pill{
-      min-width: 22px;
-      height: 22px;
-      padding: 0 7px;
-      border-radius: 999px;
-      display:inline-flex;
-      align-items:center; justify-content:center;
-      font-size: 12px;
-      font-weight: 1000;
-      background: rgba(255,255,255,.90);
-      color: rgba(33,52,72,.95);
-      border: 1px solid rgba(33,52,72,.12);
-    }
-    .qa.primary .pill{
-      background: rgba(255,255,255,.92);
-      color: rgba(33,52,72,.95);
-      border-color: rgba(255,255,255,.35);
+      box-shadow: 0 18px 30px rgba(84,119,146,.18);
     }
 
-    /* ===== Toast ===== */
-    .toast{
-      position: fixed;
-      inset-inline-start: 16px;
-      bottom: 16px;
-      z-index: 9999;
-      width: min(360px, calc(100% - 32px));
-      display:none;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.55);
-      background: rgba(255,255,255,.78);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
+    .hero-right{
+      display:grid;
+      gap: 12px;
+      grid-template-rows: auto 1fr;
+      min-height: 320px;
+    }
+
+    .panel{
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow2);
+      padding: 14px;
       overflow:hidden;
+      position: relative;
     }
-    .toast.show{ display:block; animation: pop .18s ease; }
-    @keyframes pop{
-      from{ transform: translateY(8px); opacity: .0; }
-      to{ transform: translateY(0); opacity: 1; }
+
+    .panel::after{
+      content:"";
+      position:absolute;
+      inset: auto -60px -60px auto;
+      width: 180px; height: 180px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, rgba(234,224,207,.75), transparent 62%);
+      opacity:.9;
     }
-    .toast .hd{
-      padding: 12px 14px 0;
+
+    .panel h3{
+      margin: 0 0 8px;
+      font-size: 15px;
       font-weight: 1000;
-      display:flex; align-items:center; justify-content:space-between;
+      position: relative;
+      z-index: 1;
+    }
+    .panel p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-grid{
+      position: relative;
+      z-index: 1;
+      margin-top: 12px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .toast .close{
-      border: 0;
-      background: rgba(33,52,72,.06);
-      cursor:pointer;
-      border-radius: 12px;
-      padding: 6px 10px;
-      font-weight: 900;
-      color: rgba(33,52,72,.85);
+
+    .stat{
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(241,245,249,.92);
+      padding: 12px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
     }
-    .toast .bd{
-      padding: 8px 14px 14px;
+    .stat .n{
+      font-weight: 1000;
+      font-size: 16px;
+      color: rgba(33,52,72,.95);
+    }
+    .stat .t{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ===== New Promo Marquee ===== */
+    .marquee{
+      margin-top: 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.72);
+      overflow:hidden;
+      box-shadow: 0 12px 22px rgba(33,52,72,.06);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .marquee-track{
+      display:flex;
+      gap: 14px;
+      padding: 10px 12px;
+      white-space: nowrap;
+      animation: scroll 18s linear infinite;
+    }
+    @keyframes scroll{
+      from{ transform: translateX(-10%); }
+      to{ transform: translateX(60%); }
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(33,52,72,.10);
+      background: rgba(255,255,255,.90);
+      font-weight: 900;
+      font-size: 13px;
+      color: rgba(33,52,72,.92);
+    }
+    .tag .mini{
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(33,52,72,.12);
+      background: rgba(241,245,249,.95);
+      color: rgba(33,52,72,.90);
+      font-weight: 1000;
+    }
+
+    /* ===== Section Head (new) ===== */
+    .section{ margin-top: 20px; }
+    .head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .head h2{
+      margin:0;
+      font-size: 18px;
+      font-weight: 1000;
+      color: rgba(33,52,72,.96);
+    }
+    .head p{
+      margin: 4px 0 0;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.7;
     }
 
-    /* ===== Hero Slider ===== */
-    .hero{
-      margin-top: 14px;
-      border-radius: calc(var(--radius) + 2px);
-      overflow:hidden;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      background: linear-gradient(135deg, rgba(255,255,255,.65), rgba(255,255,255,.90));
-    }
-
-    .slides{
-      position: relative;
-      min-height: 280px;
-    }
-    .slide{
-      display:none;
-      padding: 22px;
-      background:
-        radial-gradient(circle at 18% 30%, rgba(234,224,207,.55), transparent 52%),
-        radial-gradient(circle at 82% 20%, rgba(148,180,193,.45), transparent 55%),
-        radial-gradient(circle at 70% 95%, rgba(84,119,146,.18), transparent 60%),
-        linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,.92));
-    }
-    .slide.active{ display:block; }
-    .slide-inner{
+    /* ===== Category Tiles (radical) ===== */
+    .tiles{
       display:grid;
-      grid-template-columns: 1.25fr .75fr;
-      gap: 16px;
-      align-items: center;
-    }
-    .kicker{
-      display:inline-flex;
-      gap: 10px;
-      align-items:center;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.62);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      color: rgba(33,52,72,.85);
-      font-weight: 900;
-      width: fit-content;
-    }
-    .kicker .spark{
-      width: 10px; height: 10px; border-radius: 999px;
-      background: linear-gradient(135deg, var(--c2), var(--c3));
-    }
-    .slide h1{
-      margin: 10px 0 8px;
-      font-size: 34px;
-      line-height: 1.15;
-      font-weight: 1000;
-      letter-spacing: .2px;
-    }
-    .slide p{
-      margin:0 0 16px;
-      color: var(--muted);
-      line-height: 1.9;
-      font-size: 14px;
-      max-width: 62ch;
-    }
-    .hero-actions{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
-      padding: 12px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.75);
-      color: var(--text);
-      cursor:pointer;
-      font-weight: 1000;
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
-      user-select:none;
-    }
-    .btn.primary{
-      background: linear-gradient(135deg, var(--c2), var(--c3));
-      color:#fff;
-      border-color: rgba(84,119,146,.18);
-      box-shadow: 0 12px 22px rgba(84,119,146,.18);
-    }
-    .btn:hover{ filter: brightness(1.02); }
-
-    .hero-card{
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.72);
-      box-shadow: var(--shadow2);
-      padding: 14px;
-    }
-    .mini-grid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .mini{
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: rgba(241,245,249,.85);
-      padding: 12px;
-    }
-    .mini .n{ font-weight:1000; font-size: 16px; }
-    .mini .t{ color: var(--muted); font-size: 12px; margin-top: 4px; }
-
-    .slider-nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      border-top: 1px solid var(--border);
-      background: rgba(255,255,255,.70);
-    }
-    .dots{
-      display:flex; align-items:center; gap: 8px;
-    }
-    .dot{
-      width: 10px; height: 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(33,52,72,.18);
-      background: rgba(33,52,72,.08);
-      cursor:pointer;
-    }
-    .dot.active{
-      width: 26px;
-      background: linear-gradient(135deg, var(--c2), var(--c3));
-      border-color: rgba(84,119,146,.18);
-    }
-    .arrows{
-      display:flex; gap: 8px; align-items:center;
-    }
-    .arrow{
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.75);
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
-      border-radius: 14px;
-      padding: 8px 10px;
-      cursor:pointer;
-      font-weight: 1000;
-      color: rgba(33,52,72,.90);
-    }
-
-    /* ===== Offers chips ===== */
-    .chips{
-      margin-top: 14px;
-      display:flex;
-      gap: 10px;
-      overflow:auto;
-      padding-bottom: 6px;
-      scrollbar-width: thin;
-    }
-    .chip{
-      flex: 0 0 auto;
-      display:inline-flex;
-      align-items:center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.70);
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
-      cursor:pointer;
-      user-select:none;
-      white-space: nowrap;
-      font-weight: 900;
-      font-size: 13px;
-    }
-    .chip .tag{
-      font-size: 12px;
-      color: rgba(33,52,72,.90);
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(33,52,72,.12);
-      background: rgba(255,255,255,.85);
-    }
-
-    /* ===== Sections ===== */
-    .section{ margin-top: 18px; }
-    .section-head{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-    .section-title{ margin:0; font-size: 18px; font-weight: 1000; }
-    .section-sub{ margin:0; color: var(--muted); font-size: 13px; }
-
-    /* ===== Categories new style ===== */
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 12px;
     }
-    .cat{
-      position: relative;
+    .tile{
+      grid-column: span 3;
       border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.72);
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
-      padding: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 12px 22px rgba(33,52,72,.06);
       overflow:hidden;
-      transition: transform .15s ease, box-shadow .15s ease;
+      position: relative;
+      min-height: 140px;
+      padding: 14px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      transition: transform .16s ease, box-shadow .16s ease;
     }
-    .cat:hover{ transform: translateY(-2px); box-shadow: var(--shadow2); }
-    .cat::before{
+    .tile:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow2);
+    }
+    .tile::before{
       content:"";
       position:absolute;
       inset: -40px -40px auto auto;
-      width: 140px;
-      height: 140px;
+      width: 180px; height: 180px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(148,180,193,.45), transparent 60%);
-      transform: rotate(12deg);
+      background: radial-gradient(circle at 30% 30%, rgba(148,180,193,.55), transparent 62%);
+      transform: rotate(10deg);
+      opacity: .9;
     }
-    .cat-top{
+    .tile .top{
+      position: relative;
+      z-index: 1;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .tile .name{
+      font-weight: 1000;
+      font-size: 16px;
+    }
+    .tile .sub{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+    .tile .ico{
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display:grid;
+      place-items:center;
+      border: 1px solid rgba(84,119,146,.18);
+      background: linear-gradient(135deg, rgba(84,119,146,.16), rgba(148,180,193,.42));
+      box-shadow: 0 12px 18px rgba(84,119,146,.14);
+      font-size: 20px;
+      flex:0 0 auto;
+    }
+    .tile .foot{
+      position: relative;
+      z-index: 1;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 10px;
-      position: relative;
-      z-index: 1;
+      margin-top: 12px;
     }
-    .cat .name{ font-weight: 1000; }
-    .cat .hint{ color: var(--muted); font-size: 12px; margin-top: 4px; position: relative; z-index: 1; }
-    .cat .icon{
-      width: 46px; height: 46px;
-      border-radius: 18px;
-      display:grid; place-items:center;
-      background: linear-gradient(135deg, rgba(84,119,146,.18), rgba(148,180,193,.38));
-      border: 1px solid rgba(84,119,146,.18);
-      box-shadow: 0 10px 16px rgba(84,119,146,.12);
-      font-size: 18px;
+    .tile .count{
+      font-size: 12px;
+      font-weight: 1000;
+      color: rgba(33,52,72,.92);
+      background: rgba(241,245,249,.90);
+      border: 1px solid rgba(33,52,72,.10);
+      border-radius: 999px;
+      padding: 6px 10px;
+      white-space: nowrap;
     }
+    .tile .go{
+      font-size: 12px;
+      font-weight: 1000;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(33,52,72,.10);
+      background: #fff;
+      box-shadow: 0 10px 16px rgba(33,52,72,.06);
+      transition: transform .16s ease;
+    }
+    .tile:hover .go{ transform: translateX(-2px); }
 
-    /* ===== Products cards (for include) ===== */
+    /* tile spans to make it “different” */
+    .tile.wide{ grid-column: span 6; min-height: 160px; }
+    .tile.tall{ grid-column: span 3; min-height: 220px; }
+
+    /* ===== Products Grid (new card style) ===== */
     .products{
       display:grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 12px;
     }
-    .card{
+    .p{
+      grid-column: span 3;
       border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.75);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 12px 22px rgba(33,52,72,.06);
       overflow:hidden;
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
       display:flex;
       flex-direction:column;
-      min-height: 330px;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-    .card:hover{ transform: translateY(-2px); box-shadow: var(--shadow2); }
-
-    .thumb{
-      height: 160px;
-      background:
-        radial-gradient(circle at 22% 30%, rgba(234,224,207,.70), transparent 60%),
-        radial-gradient(circle at 78% 24%, rgba(148,180,193,.55), transparent 60%),
-        linear-gradient(135deg, rgba(84,119,146,.22), rgba(255,255,255,.0));
+      min-height: 340px;
+      transition: transform .16s ease, box-shadow .16s ease;
       position: relative;
     }
-    .badge{
+    .p:hover{ transform: translateY(-2px); box-shadow: var(--shadow2); }
+
+    .p-media{
+      height: 170px;
+      position: relative;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(234,224,207,.72), transparent 60%),
+        radial-gradient(circle at 80% 25%, rgba(148,180,193,.55), transparent 60%),
+        linear-gradient(135deg, rgba(84,119,146,.18), rgba(255,255,255,.0));
+    }
+    .p-badge{
       position:absolute;
       top: 12px;
       inset-inline-start: 12px;
-      background: rgba(255,255,255,.92);
-      color: rgba(33,52,72,.92);
       padding: 6px 10px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 1000;
       border: 1px solid rgba(33,52,72,.12);
-      box-shadow: 0 8px 14px rgba(33,52,72,.06);
+      background: rgba(255,255,255,.92);
+      font-weight: 1000;
+      font-size: 12px;
+      color: rgba(33,52,72,.92);
+      box-shadow: 0 10px 16px rgba(33,52,72,.06);
     }
 
-    .card-body{
+    .p-body{
       padding: 14px;
       display:flex;
       flex-direction:column;
       gap: 10px;
       flex: 1;
     }
-    .p-title{ font-weight: 1000; line-height: 1.35; }
-    .p-desc{ color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .p-title{
+      font-weight: 1000;
+      line-height: 1.35;
+      font-size: 14px;
+    }
+    .p-desc{
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.9;
+    }
 
-    .row-between{
+    .p-meta{
+      margin-top:auto;
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 10px;
-      flex-wrap: wrap;
-      margin-top:auto;
+      flex-wrap:wrap;
     }
     .price{
       font-weight: 1000;
@@ -493,19 +485,20 @@
       color: rgba(33,52,72,.95);
     }
     .old{
+      margin-inline-start: 6px;
+      font-size: 12px;
       color: rgba(91,114,132,.75);
       text-decoration: line-through;
-      font-size: 12px;
-      margin-inline-start: 6px;
     }
 
-    .actions{
+    .p-actions{
       display:flex;
       gap: 8px;
       align-items:center;
     }
+
     .add{
-      border:0;
+      border: 0;
       cursor:pointer;
       padding: 10px 12px;
       border-radius: 999px;
@@ -515,272 +508,364 @@
       display:inline-flex;
       align-items:center;
       gap: 8px;
-      box-shadow: 0 12px 22px rgba(84,119,146,.18);
+      box-shadow: 0 14px 24px rgba(84,119,146,.18);
+      transition: transform .16s ease, filter .16s ease;
+      white-space: nowrap;
     }
-    .add:hover{ filter: brightness(1.03); }
-    .add:disabled{ opacity:.7; cursor:not-allowed; }
+    .add:hover{ transform: translateY(-1px); filter: brightness(1.03); }
 
     .fav{
       border: 1px solid rgba(33,52,72,.12);
-      background: rgba(255,255,255,.88);
-      color: rgba(33,52,72,.90);
+      background: rgba(255,255,255,.95);
       cursor:pointer;
       padding: 10px 12px;
       border-radius: 999px;
-      display:inline-flex;
-      align-items:center;
-      gap: 8px;
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
+      box-shadow: 0 10px 16px rgba(33,52,72,.06);
+      font-weight: 1000;
+      white-space: nowrap;
     }
     .fav:hover{ background: rgba(241,245,249,.95); }
 
-    /* ===== Benefits ===== */
-    .benefits{
+    /* ===== Feature strip ===== */
+    .features{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(12, 1fr);
       gap: 12px;
     }
-    .benefit{
+    .f{
+      grid-column: span 4;
       border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.72);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 12px 22px rgba(33,52,72,.06);
       padding: 14px;
-      box-shadow: 0 10px 18px rgba(33,52,72,.06);
       position: relative;
       overflow:hidden;
     }
-    .benefit::after{
+    .f::before{
       content:"";
       position:absolute;
-      inset: auto -60px -60px auto;
-      width: 160px;
-      height: 160px;
+      inset: auto -70px -70px auto;
+      width: 200px; height: 200px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(234,224,207,.55), transparent 62%);
+      background: radial-gradient(circle at 30% 30%, rgba(234,224,207,.72), transparent 62%);
+      opacity: .9;
     }
-    .benefit .t{ font-weight: 1000; margin: 2px 0 6px; position: relative; z-index: 1; }
-    .benefit .d{ color: var(--muted); font-size: 13px; line-height: 1.8; margin:0; position: relative; z-index: 1; }
+    .f .t{
+      position: relative;
+      z-index: 1;
+      font-weight: 1000;
+      margin: 0 0 6px;
+    }
+    .f .d{
+      position: relative;
+      z-index: 1;
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.9;
+    }
 
     /* ===== Responsive ===== */
-    @media (max-width: 980px){
-      .slide-inner{ grid-template-columns: 1fr; }
-      .grid{ grid-template-columns: 1fr 1fr; }
-      .products{ grid-template-columns: 1fr 1fr; }
-      .benefits{ grid-template-columns: 1fr; }
-      .topbar-inner{ flex-wrap: wrap; }
+    @media (max-width: 1020px){
+      .hero-inner{ grid-template-columns: 1fr; }
+      .hero-title{ font-size: 32px; }
+      .tiles{ grid-template-columns: repeat(6, 1fr); }
+      .tile{ grid-column: span 3; }
+      .tile.wide{ grid-column: span 6; }
+      .products{ grid-template-columns: repeat(6, 1fr); }
+      .p{ grid-column: span 3; }
+      .features{ grid-template-columns: repeat(6, 1fr); }
+      .f{ grid-column: span 3; }
+      .marquee-track{ animation-duration: 22s; }
     }
-    @media (max-width: 520px){
-      .grid{ grid-template-columns: 1fr; }
-      .products{ grid-template-columns: 1fr; }
-      .slide h1{ font-size: 26px; }
-      .search .k{ display:none; }
+    @media (max-width: 560px){
+      .hero-title{ font-size: 26px; }
+      .tiles{ grid-template-columns: repeat(2, 1fr); }
+      .tile, .tile.wide, .tile.tall{ grid-column: span 2; min-height: 150px; }
+      .products{ grid-template-columns: repeat(2, 1fr); }
+      .p{ grid-column: span 2; }
+      .features{ grid-template-columns: repeat(2, 1fr); }
+      .f{ grid-column: span 2; }
+      .marquee-track{ animation: none; overflow:auto; }
     }
   </style>
 </head>
 
 <body>
 
-  {% include 'header.html' %}
-
-  <!-- Topbar محلي (جديد) -->
-  <div class="topbar" role="banner" aria-label="شريط علوي سريع">
-    <div class="wrap">
-      <div class="topbar-inner">
-        <a class="brand" href="#" data-action="home">
-          <span class="dot" aria-hidden="true"></span>
-          <span>متجر التقنية</span>
-        </a>
-
-        <div class="search" role="search">
-          <span aria-hidden="true">🔎</span>
-          <input id="q" type="search" placeholder="ابحث عن لابتوب… جوال… سماعات…" autocomplete="off" />
-          <span class="k">Enter</span>
-        </div>
-
-        <div class="quick-actions">
-          <button class="qa" type="button" data-action="offers">العروض</button>
-          <button class="qa" type="button" data-action="categories">الأقسام</button>
-
-          <button class="qa primary" type="button" data-action="cart">
-            السلة <span class="pill" id="cartCount">0</span>
-          </button>
-
-          <button class="qa" type="button" data-action="fav">
-            المفضلة <span class="pill" id="favCount">0</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% include "header.html" %}
 
   <main class="wrap">
 
-    <!-- HERO Slider -->
-    <section class="hero" aria-label="بنر رئيسي">
-      <div class="slides" id="slides">
+    <!-- HERO (جديد جذري) -->
+    <section class="hero" aria-label="واجهة رئيسية">
+      <div class="hero-inner">
 
-        <div class="slide active" data-slide="0">
-          <div class="slide-inner">
-            <div>
-              <div class="kicker"><span class="spark"></span> خصومات موسمية على التقنية</div>
-              <h1>تجربة شراء أسرع… وواجهة أجمل</h1>
-              <p>تصفّح منتجاتنا بخطوات بسيطة: ابحث، قارن، وأضف للسلة. تصميم خفيف ومريح للعين مع أداء سريع.</p>
-              <div class="hero-actions">
-                <a class="btn primary" href="#featured">تصفّح العروض</a>
-                <a class="btn" href="#categories">الأقسام</a>
-              </div>
+        <div class="hero-left">
+          <div>
+            <div class="hero-kicker"><span class="dot"></span> عروض قوية + تجربة سريعة</div>
+            <h1 class="hero-title">شكل جديد… أسرع… أوضح.</h1>
+            <p class="hero-desc">
+              تصميم مختلف بالكامل لتجربة متجر تقنية احترافية: أقسام ذكية، منتجات مرتبة، وأزرار عملية للسلة والمفضلة.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn primary" href="#featured">ابدأ بالعروض</a>
+              <a class="btn" href="#categories">تصفح الأقسام</a>
+              <button class="btn" type="button" data-action="toast" data-msg="اربط البحث بصفحة /shop/ لاحقاً">بحث سريع</button>
             </div>
+          </div>
 
-            <div class="hero-card">
-              <div style="font-weight:1000; font-size:16px;">مزايا المتجر</div>
-              <div style="color:var(--muted); font-size:13px; margin-top:6px; line-height:1.8;">
-                تغليف آمن + خيارات دفع متعددة + دعم سريع
-              </div>
+          <div style="margin-top:14px; display:flex; gap:10px; flex-wrap:wrap;">
+            <span class="tag">🚚 شحن سريع <span class="mini">24–48</span></span>
+            <span class="tag">🔒 دفع آمن <span class="mini">Mada</span></span>
+            <span class="tag">🛡️ ضمان <span class="mini">موثّق</span></span>
+          </div>
+        </div>
 
-              <div class="mini-grid">
-                <div class="mini"><div class="n">24–48 ساعة</div><div class="t">توصيل لمعظم المدن</div></div>
-                <div class="mini"><div class="n">دفع آمن</div><div class="t">مدى / بطاقات / Apple Pay</div></div>
-                <div class="mini"><div class="n">ضمان</div><div class="t">سياسات واضحة</div></div>
-                <div class="mini"><div class="n">دعم سريع</div><div class="t">واتساب / بريد</div></div>
-              </div>
+        <div class="hero-right">
+          <div class="panel">
+            <h3>لوحة سريعة</h3>
+            <p>أزرار جاهزة للربط: السلة / المفضلة / العروض.</p>
+            <div class="panel-grid">
+              <div class="stat"><div class="n" id="uiCart">0</div><div class="t">عناصر بالسلة</div></div>
+              <div class="stat"><div class="n" id="uiFav">0</div><div class="t">عناصر بالمفضلة</div></div>
+              <div class="stat"><div class="n">+120</div><div class="t">منتج متوفر</div></div>
+              <div class="stat"><div class="n">4.8★</div><div class="t">تقييم العملاء</div></div>
+            </div>
+          </div>
+
+          <div class="panel" style="display:flex; flex-direction:column; gap:10px; justify-content:space-between;">
+            <div>
+              <h3>أفضل تصنيفات اليوم</h3>
+              <p>اختصر وقتك بالوصول المباشر للأكثر طلبًا.</p>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; position:relative; z-index:1;">
+              <a class="btn" href="#categories" style="padding:10px 12px;">💻 لابتوبات</a>
+              <a class="btn" href="#categories" style="padding:10px 12px;">📱 جوالات</a>
+              <a class="btn" href="#categories" style="padding:10px 12px;">🎧 سماعات</a>
+              <a class="btn primary" href="#featured" style="padding:10px 12px;">🔥 خصومات</a>
             </div>
           </div>
         </div>
 
-        <div class="slide" data-slide="1">
-          <div class="slide-inner">
-            <div>
-              <div class="kicker"><span class="spark"></span> أحدث الأجهزة</div>
-              <h1>اختيار ذكي… بأسلوب عرض واضح</h1>
-              <p>كروت منتجات أنظف، ومفضلة وسلة بشكل عملي، مع تنقّل أسهل بين الأقسام والعروض.</p>
-              <div class="hero-actions">
-                <a class="btn primary" href="#categories">ابدأ بالأقسام</a>
-                <a class="btn" href="#why">لماذا نحن؟</a>
-              </div>
-            </div>
-
-            <div class="hero-card">
-              <div style="font-weight:1000; font-size:16px;">اقتراحات سريعة</div>
-              <div style="color:var(--muted); font-size:13px; margin-top:6px; line-height:1.8;">
-                اختصر وقتك بالوصول لعروض جاهزة
-              </div>
-
-              <div class="mini-grid">
-                <div class="mini"><div class="n">💻 لابتوبات</div><div class="t">للعمل والدراسة</div></div>
-                <div class="mini"><div class="n">📱 جوالات</div><div class="t">الأحدث والأفضل</div></div>
-                <div class="mini"><div class="n">🎧 سماعات</div><div class="t">صوت نقي</div></div>
-                <div class="mini"><div class="n">🔌 إكسسوارات</div><div class="t">شواحن وكوابل</div></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="slider-nav" aria-label="تنقل السلايدر">
-        <div class="dots" id="dots">
-          <button class="dot active" type="button" aria-label="شريحة 1" data-dot="0"></button>
-          <button class="dot" type="button" aria-label="شريحة 2" data-dot="1"></button>
-        </div>
-        <div class="arrows">
-          <button class="arrow" type="button" data-prev>‹</button>
-          <button class="arrow" type="button" data-next>›</button>
-        </div>
       </div>
     </section>
 
-    <!-- Offers chips -->
-    <div class="chips" aria-label="عروض سريعة">
-      <button class="chip" type="button" data-action="chip" data-chip="best">
-        🔥 الأكثر مبيعًا <span class="tag">Best</span>
-      </button>
-      <button class="chip" type="button" data-action="chip" data-chip="new">
-        ✨ وصل حديثًا <span class="tag">New</span>
-      </button>
-      <button class="chip" type="button" data-action="chip" data-chip="sale">
-        💸 خصومات <span class="tag">Sale</span>
-      </button>
-      <button class="chip" type="button" data-action="chip" data-chip="gaming">
-        🎮 ألعاب <span class="tag">Gaming</span>
-      </button>
-      <button class="chip" type="button" data-action="chip" data-chip="office">
-        🧰 مكتبي <span class="tag">Office</span>
-      </button>
+    <!-- Marquee / Promotions (جديد) -->
+    <div class="marquee" aria-label="شريط عروض">
+      <div class="marquee-track">
+        <span class="tag">💸 خصومات موسمية <span class="mini">Sale</span></span>
+        <span class="tag">⚡ تجهيز سريع <span class="mini">Fast</span></span>
+        <span class="tag">🎮 قسم الألعاب <span class="mini">Gaming</span></span>
+        <span class="tag">🧰 مكتبي <span class="mini">Office</span></span>
+        <span class="tag">🔌 إكسسوارات <span class="mini">Gear</span></span>
+      </div>
     </div>
 
-    <!-- ✅ هنا مباشرة نستدعي قالب المنتجات -->
-    {% include "catalog_templates/products_section.html" %}
-
+    <!-- أقسام (Tiles جديد جذري) -->
     <section class="section" id="categories">
-      <div class="section-head">
+      <div class="head">
         <div>
-          <h2 class="section-title">الأقسام</h2>
-          <p class="section-sub">اختر ما يناسبك من منتجات التقنية</p>
+          <h2>الأقسام</h2>
+          <p>تصميم Tiles مختلف بالكامل — سريع وواضح للمستخدم.</p>
         </div>
+        <a class="btn" href="#" data-action="toast" data-msg="اربط عرض كل الأقسام لاحقاً">عرض الكل</a>
       </div>
 
-      <div class="grid">
-        <a class="cat" href="#" data-action="cat" data-cat="laptops">
-          <div class="cat-top">
+      <div class="tiles">
+        <a class="tile wide" href="#" data-action="toast" data-msg="قسم اللابتوبات">
+          <div class="top">
             <div>
               <div class="name">لابتوبات</div>
-              <div class="hint">للعمل والدراسة</div>
+              <div class="sub">للعمل والدراسة والبرمجة</div>
             </div>
-            <div class="icon">💻</div>
+            <div class="ico">💻</div>
+          </div>
+          <div class="foot">
+            <span class="count">+34 منتج</span>
+            <span class="go">تصفح ←</span>
           </div>
         </a>
 
-        <a class="cat" href="#" data-action="cat" data-cat="phones">
-          <div class="cat-top">
+        <a class="tile" href="#" data-action="toast" data-msg="قسم الجوالات">
+          <div class="top">
             <div>
               <div class="name">جوالات</div>
-              <div class="hint">الأحدث والأفضل</div>
+              <div class="sub">الأحدث والأكثر طلباً</div>
             </div>
-            <div class="icon">📱</div>
+            <div class="ico">📱</div>
+          </div>
+          <div class="foot">
+            <span class="count">+28 منتج</span>
+            <span class="go">تصفح ←</span>
           </div>
         </a>
 
-        <a class="cat" href="#" data-action="cat" data-cat="audio">
-          <div class="cat-top">
+        <a class="tile tall" href="#" data-action="toast" data-msg="قسم السماعات">
+          <div class="top">
             <div>
               <div class="name">سماعات</div>
-              <div class="hint">صوت نقي</div>
+              <div class="sub">صوت نقي وتجربة مريحة</div>
             </div>
-            <div class="icon">🎧</div>
+            <div class="ico">🎧</div>
+          </div>
+          <div class="foot">
+            <span class="count">+19 منتج</span>
+            <span class="go">تصفح ←</span>
           </div>
         </a>
 
-        <a class="cat" href="#" data-action="cat" data-cat="accessories">
-          <div class="cat-top">
+        <a class="tile" href="#" data-action="toast" data-msg="قسم الإكسسوارات">
+          <div class="top">
             <div>
               <div class="name">إكسسوارات</div>
-              <div class="hint">شواحن وكوابل</div>
+              <div class="sub">شواحن / كوابل / ملحقات</div>
             </div>
-            <div class="icon">🔌</div>
+            <div class="ico">🔌</div>
+          </div>
+          <div class="foot">
+            <span class="count">+41 منتج</span>
+            <span class="go">تصفح ←</span>
+          </div>
+        </a>
+
+        <a class="tile wide" href="#" data-action="toast" data-msg="قسم المنزل الذكي">
+          <div class="top">
+            <div>
+              <div class="name">منزل ذكي</div>
+              <div class="sub">كاميرات / حساسات / تحكم</div>
+            </div>
+            <div class="ico">🏠</div>
+          </div>
+          <div class="foot">
+            <span class="count">+16 منتج</span>
+            <span class="go">تصفح ←</span>
+          </div>
+        </a>
+
+        <a class="tile" href="#" data-action="toast" data-msg="قسم الشاشات">
+          <div class="top">
+            <div>
+              <div class="name">شاشات</div>
+              <div class="sub">بدقة عالية وقياسات متعددة</div>
+            </div>
+            <div class="ico">🖥️</div>
+          </div>
+          <div class="foot">
+            <span class="count">+12 منتج</span>
+            <span class="go">تصفح ←</span>
           </div>
         </a>
       </div>
     </section>
 
-    <section class="section" id="why">
-      <div class="section-head">
+    <!-- منتجات مميزة (إذا عندك include جاهز استخدمه أو استخدم grid الجديدة أدناه) -->
+    <section class="section" id="featured">
+      <div class="head">
         <div>
-          <h2 class="section-title">لماذا متجر التقنية؟</h2>
-          <p class="section-sub">خدمات تساعدك تشتري وأنت مرتاح</p>
+          <h2>منتجات مميزة</h2>
+          <p>كروت منتجات جديدة بالكامل — ترتيب واضح وأزرار عملية.</p>
+        </div>
+        <a class="btn" href="#" data-action="toast" data-msg="اربط عرض كل المنتجات لاحقاً">عرض كل المنتجات</a>
+      </div>
+
+      <!-- ✅ خيار 1: إذا عندك include جاهز -->
+      {# {% include "catalog_templates/products_section.html" %} #}
+
+      <!-- ✅ خيار 2: Grid منتجات جديد (Demo) -->
+      <div class="products">
+        <article class="p" data-product-id="p1" data-product-name="لابتوب احترافي">
+          <div class="p-media">
+            <span class="p-badge">خصم</span>
+          </div>
+          <div class="p-body">
+            <div class="p-title">لابتوب احترافي للأعمال والبرمجة</div>
+            <div class="p-desc">معالج قوي + شاشة ممتازة + بطارية تدوم.</div>
+            <div class="p-meta">
+              <div class="price">3,499 ر.س <span class="old">3,999</span></div>
+              <div class="p-actions">
+                <button class="fav" type="button" data-fav>♡</button>
+                <button class="add" type="button" data-add>🛒 إضافة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="p" data-product-id="p2" data-product-name="هاتف ذكي">
+          <div class="p-media">
+            <span class="p-badge">جديد</span>
+          </div>
+          <div class="p-body">
+            <div class="p-title">هاتف ذكي — أداء سريع وكاميرا قوية</div>
+            <div class="p-desc">تجربة يومية ممتازة وتصوير احترافي.</div>
+            <div class="p-meta">
+              <div class="price">2,199 ر.س</div>
+              <div class="p-actions">
+                <button class="fav" type="button" data-fav>♡</button>
+                <button class="add" type="button" data-add>🛒 إضافة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="p" data-product-id="p3" data-product-name="سماعة لاسلكية">
+          <div class="p-media">
+            <span class="p-badge">الأفضل</span>
+          </div>
+          <div class="p-body">
+            <div class="p-title">سماعة لاسلكية — عزل ممتاز وصوت نقي</div>
+            <div class="p-desc">مناسبة للعمل والسفر ومكالمات واضحة.</div>
+            <div class="p-meta">
+              <div class="price">399 ر.س <span class="old">499</span></div>
+              <div class="p-actions">
+                <button class="fav" type="button" data-fav>♡</button>
+                <button class="add" type="button" data-add>🛒 إضافة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="p" data-product-id="p4" data-product-name="طقم إكسسوارات">
+          <div class="p-media">
+            <span class="p-badge">عرض</span>
+          </div>
+          <div class="p-body">
+            <div class="p-title">طقم إكسسوارات — شاحن + كابل + حامل</div>
+            <div class="p-desc">خيار ذكي بسعر مناسب وجودة عالية.</div>
+            <div class="p-meta">
+              <div class="price">149 ر.س</div>
+              <div class="p-actions">
+                <button class="fav" type="button" data-fav>♡</button>
+                <button class="add" type="button" data-add>🛒 إضافة</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="why">
+      <div class="head">
+        <div>
+          <h2>لماذا متجر التقنية؟</h2>
+          <p>مزايا بشكل جديد ومختلف عن السابق.</p>
         </div>
       </div>
 
-      <div class="benefits">
-        <div class="benefit">
-          <div class="t">منتجات أصلية</div>
+      <div class="features">
+        <div class="f">
+          <h3 class="t">منتجات أصلية</h3>
           <p class="d">اختيارات موثوقة مع ضمان واضح وتجربة شراء مطمئنة.</p>
         </div>
-        <div class="benefit">
-          <div class="t">شحن سريع</div>
+        <div class="f">
+          <h3 class="t">شحن سريع</h3>
           <p class="d">تجهيز الطلبات بسرعة وتحديثات واضحة لتتبّع الشحنة.</p>
         </div>
-        <div class="benefit">
-          <div class="t">دعم يساعدك</div>
+        <div class="f">
+          <h3 class="t">دعم يساعدك</h3>
           <p class="d">تواصل سريع للاستفسارات قبل وبعد الشراء.</p>
         </div>
       </div>
@@ -788,204 +873,126 @@
 
   </main>
 
-  {% include 'footer.html' %}
+  {% include "footer.html" %}
 
-  <!-- Toast UI -->
-  <div class="toast" id="toast" role="status" aria-live="polite">
-    <div class="hd">
-      <div id="toastTitle">تنبيه</div>
-      <button class="close" type="button" id="toastClose">إغلاق</button>
+  <!-- Toast -->
+  <div id="toast" style="
+    position:fixed; bottom:16px; inset-inline-start:16px;
+    width:min(360px, calc(100% - 32px));
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,.55);
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: var(--shadow2);
+    padding: 12px 12px;
+    display:none;
+    z-index:9999;">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+      <div id="toastTitle" style="font-weight:1000;">تنبيه</div>
+      <button id="toastClose" type="button" style="
+        border:0; background: rgba(33,52,72,.06);
+        border-radius:12px; padding:6px 10px;
+        cursor:pointer; font-weight:900; color: rgba(33,52,72,.85);">إغلاق</button>
     </div>
-    <div class="bd" id="toastMsg"></div>
+    <div id="toastMsg" style="margin-top:6px; color: var(--muted); font-size:13px; line-height:1.8;"></div>
   </div>
 
   <script>
     (function(){
       "use strict";
 
+      const toastEl = document.getElementById('toast');
+      const toastTitle = document.getElementById('toastTitle');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastClose = document.getElementById('toastClose');
+      let timer = null;
+
+      function showToast(title, msg){
+        toastTitle.textContent = title || 'تنبيه';
+        toastMsg.textContent = msg || '';
+        toastEl.style.display = 'block';
+        clearTimeout(timer);
+        timer = setTimeout(()=> toastEl.style.display='none', 1800);
+      }
+      toastClose.addEventListener('click', ()=> toastEl.style.display='none');
+
       function safeInt(v){
         const n = parseInt(v, 10);
         return Number.isFinite(n) && n >= 0 ? n : 0;
       }
 
-      // ===== Toast =====
-      const toastEl = document.getElementById('toast');
-      const toastTitleEl = document.getElementById('toastTitle');
-      const toastMsgEl = document.getElementById('toastMsg');
-      const toastClose = document.getElementById('toastClose');
-
-      let toastTimer = null;
-
-      function toast(title, msg){
-        toastTitleEl.textContent = title || 'تنبيه';
-        toastMsgEl.textContent = msg || '';
-        toastEl.classList.add('show');
-        if(toastTimer) clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1800);
+      // Sync quick panel stats
+      function syncStats(){
+        const cart = safeInt(localStorage.getItem('cart_count'));
+        const fav  = safeInt(localStorage.getItem('fav_count'));
+        const uiCart = document.getElementById('uiCart');
+        const uiFav  = document.getElementById('uiFav');
+        if(uiCart) uiCart.textContent = String(cart);
+        if(uiFav) uiFav.textContent  = String(fav);
       }
+      window.addEventListener('storage', syncStats);
+      syncStats();
 
-      toastClose.addEventListener('click', () => toastEl.classList.remove('show'));
-
-      // ===== Counts =====
-      const cartCountEl = document.getElementById('cartCount');
-      const favCountEl  = document.getElementById('favCount');
-
-      function setCartCount(count){
-        localStorage.setItem('cart_count', String(count));
-        window.dispatchEvent(new Event('cart:updated'));
-      }
-      function setFavCount(count){
-        localStorage.setItem('fav_count', String(count));
-        window.dispatchEvent(new Event('fav:updated'));
-      }
-
-      function syncBadges(){
-        cartCountEl.textContent = String(safeInt(localStorage.getItem('cart_count')));
-        favCountEl.textContent  = String(safeInt(localStorage.getItem('fav_count')));
-      }
-      window.addEventListener('cart:updated', syncBadges);
-      window.addEventListener('fav:updated', syncBadges);
-
+      // Favorites set
       function getFavSet(){
         try{ return new Set(JSON.parse(localStorage.getItem('fav_set') || '[]')); }
         catch(_){ return new Set(); }
       }
       function saveFavSet(set){
         localStorage.setItem('fav_set', JSON.stringify(Array.from(set)));
+        localStorage.setItem('fav_count', String(set.size));
       }
 
-      // ===== Slider =====
-      const slidesWrap = document.getElementById('slides');
-      const slides = Array.from(slidesWrap.querySelectorAll('.slide'));
-      const dotsWrap = document.getElementById('dots');
-      const dots = Array.from(dotsWrap.querySelectorAll('.dot'));
-      const prevBtn = document.querySelector('[data-prev]');
-      const nextBtn = document.querySelector('[data-next]');
-
-      let idx = 0;
-
-      function show(i){
-        idx = (i + slides.length) % slides.length;
-        slides.forEach((s, k) => s.classList.toggle('active', k === idx));
-        dots.forEach((d, k) => d.classList.toggle('active', k === idx));
+      function refreshFavButtons(){
+        const set = getFavSet();
+        document.querySelectorAll('[data-fav]').forEach(btn=>{
+          const card = btn.closest('[data-product-id]');
+          const pid = card && card.getAttribute('data-product-id');
+          const on = pid && set.has(pid);
+          btn.textContent = on ? '♥' : '♡';
+          btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+        syncStats();
       }
 
-      prevBtn.addEventListener('click', () => show(idx - 1));
-      nextBtn.addEventListener('click', () => show(idx + 1));
-      dots.forEach(d => d.addEventListener('click', () => show(safeInt(d.getAttribute('data-dot')))));
-
-      // Auto rotate (خفيف)
-      setInterval(() => show(idx + 1), 7000);
-
-      // ===== Search Demo =====
-      const q = document.getElementById('q');
-      q.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter'){
-          e.preventDefault();
-          const val = (q.value || '').trim();
-          toast('بحث', val ? ('بحث عن: ' + val) : 'اكتب كلمة البحث أولاً');
-        }
-      });
-
-      // ===== Add to cart (same selector as your include) =====
-      document.querySelectorAll('[data-add-to-cart]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const current = safeInt(localStorage.getItem('cart_count'));
-          setCartCount(current + 1);
-          syncBadges();
-
-          const old = btn.textContent;
-          btn.textContent = 'تمت الإضافة ✅';
-          btn.disabled = true;
-          setTimeout(() => {
-            btn.textContent = old.trim();
-            btn.disabled = false;
-          }, 850);
-
-          toast('السلة', 'تمت إضافة المنتج للسلة ✅');
+      // Add to cart + fav
+      document.querySelectorAll('[data-add]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const cur = safeInt(localStorage.getItem('cart_count'));
+          localStorage.setItem('cart_count', String(cur + 1));
+          syncStats();
+          showToast('السلة', 'تمت إضافة المنتج للسلة ✅');
         });
       });
 
-      // ===== Favorites per product (same selector as your include) =====
-      function refreshFavUI(){
-        const favSet = getFavSet();
-        document.querySelectorAll('[data-fav]').forEach(btn => {
+      document.querySelectorAll('[data-fav]').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
           const card = btn.closest('[data-product-id]');
-          const pid = card?.getAttribute('data-product-id');
-          const isOn = pid && favSet.has(pid);
-          btn.textContent = isOn ? '♥' : '♡';
-          btn.setAttribute('aria-pressed', isOn ? 'true' : 'false');
-        });
-        setFavCount(favSet.size);
-        syncBadges();
-      }
-
-      document.querySelectorAll('[data-fav]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const card = btn.closest('[data-product-id]');
-          const pid = card?.getAttribute('data-product-id');
-          const name = card?.getAttribute('data-product-name') || 'المنتج';
+          const pid = card && card.getAttribute('data-product-id');
+          const name = card && card.getAttribute('data-product-name') || 'المنتج';
           if(!pid) return;
 
-          const favSet = getFavSet();
+          const set = getFavSet();
           let added = false;
+          if(set.has(pid)){ set.delete(pid); }
+          else{ set.add(pid); added = true; }
 
-          if(favSet.has(pid)){ favSet.delete(pid); }
-          else{ favSet.add(pid); added = true; }
-
-          saveFavSet(favSet);
-          refreshFavUI();
-
-          toast('المفضلة', added ? ('تمت إضافة: ' + name) : ('تمت إزالة: ' + name));
+          saveFavSet(set);
+          refreshFavButtons();
+          showToast('المفضلة', added ? ('تمت إضافة: ' + name) : ('تمت إزالة: ' + name));
         });
       });
 
-      // ===== Actions Demo =====
-      document.querySelectorAll('[data-action]').forEach(el => {
-        el.addEventListener('click', (e) => {
-          // اترك الروابط الحقيقية إن كانت # فقط
-          const tag = (el.getAttribute('data-action') || '').trim();
-          if(el.tagName.toLowerCase() === 'a' || el.tagName.toLowerCase() === 'button'){
-            e.preventDefault();
-          }
-
-          if(tag === 'categories'){
-            document.getElementById('categories')?.scrollIntoView({behavior:'smooth', block:'start'});
-            return;
-          }
-          if(tag === 'offers'){
-            toast('العروض', 'اربطه لاحقاً بصفحة /shop/offers/');
-            return;
-          }
-          if(tag === 'cart'){
-            toast('السلة', 'اربطه لاحقاً بصفحة /shop/cart/');
-            return;
-          }
-          if(tag === 'fav'){
-            toast('المفضلة', 'اربطه لاحقاً بصفحة /shop/favorites/');
-            return;
-          }
-          if(tag === 'chip'){
-            toast('تصفية', 'فلتر سريع: ' + (el.getAttribute('data-chip') || ''));
-            return;
-          }
-          if(tag === 'cat'){
-            toast('قسم', 'قسم: ' + (el.getAttribute('data-cat') || ''));
-            return;
-          }
-          if(tag === 'home'){
-            toast('الرئيسية', 'أنت في الصفحة الرئيسية ✅');
-            return;
-          }
-
-          toast('تنبيه', 'زر جاهز ✅ اربطه بالروابط الحقيقية لاحقاً.');
+      // Generic action toast
+      document.querySelectorAll('[data-action="toast"]').forEach(el=>{
+        el.addEventListener('click', ()=>{
+          const msg = el.getAttribute('data-msg') || 'زر جاهز ✅ اربطه لاحقاً';
+          showToast('تنبيه', msg);
         });
       });
 
-      // init
-      syncBadges();
-      refreshFavUI();
-      show(0);
+      refreshFavButtons();
     })();
   </script>
 

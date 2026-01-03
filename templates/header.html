@@ -1,126 +1,70 @@
 {% load static %}
-<!-- header.html (Noon-like RTL - NEW DESIGN) -->
+<!-- header.html (Header + Navbar + Mobile Sidebar RTL) -->
 
 <style>
   :root{
     --bg:#ffffff;
-    --soft:#f5f6f7;
-    --soft2:#f0f2f5;
+    --soft:#f6f7f9;
+    --soft2:#eef2f7;
     --line:#e6e8eb;
 
-    --text:#101820;
-    --muted:#6b7280;
+    --text:#0f172a;
+    --muted:#64748b;
 
-    /* Noon vibe */
-    --noon:#ffd400;       /* primary */
-    --noon2:#111827;      /* dark */
-    --accent:#2563eb;     /* link accent */
+    --brand:#ffd400;
+    --dark:#111827;
+    --accent:#2563eb;
 
     --radius:16px;
-    --shadow: 0 10px 28px rgba(16,24,32,.10);
+    --shadow: 0 16px 40px rgba(15,23,42,.14);
   }
 
+  body{ margin:0; }
+
+  /* ================= HEADER ================= */
   .site-header{
     direction: rtl;
     font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-    color: var(--text);
     background: var(--bg);
-  }
-  .site-header a{ color: inherit; text-decoration:none; }
-  .site-header .wrap{ max-width: 1200px; margin:0 auto; padding: 0 16px; }
-
-  /* ===== Top thin bar ===== */
-  .topbar{
-    background: #fff;
+    color: var(--text);
     border-bottom: 1px solid var(--line);
-    font-size: 12.5px;
-    color: rgba(16,24,32,.88);
-  }
-  .topbar-row{
-    display:flex; align-items:center; justify-content:space-between;
-    gap: 10px; flex-wrap:wrap;
-    padding: 8px 0;
-  }
-  .top-links, .top-auth{
-    display:flex; align-items:center; gap: 10px; flex-wrap:wrap;
-  }
-  .top-link{
-    color: rgba(16,24,32,.86);
-    padding: 4px 8px;
-    border-radius: 10px;
-  }
-  .top-link:hover{ background: var(--soft); }
-  .top-pill{
-    display:inline-flex; align-items:center; gap: 8px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: var(--soft);
-    border: 1px solid var(--line);
-    white-space:nowrap;
-  }
-  .top-btn{
-    appearance:none;
-    border: 1px solid var(--line);
-    background: #fff;
-    color: rgba(16,24,32,.88);
-    padding: 5px 10px;
-    border-radius: 10px;
-    cursor:pointer;
-  }
-  .top-btn:hover{ background: var(--soft); }
-
-  /* ===== Main bar (Yellow like noon) ===== */
-  .mainbar{
-    background: var(--noon);
-    border-bottom: 1px solid rgba(0,0,0,.06);
     position: sticky;
     top: 0;
-    z-index: 60;
+    z-index: 1000;
   }
-  .mainbar.is-scrolled{ box-shadow: var(--shadow); }
+  .site-header a{ color: inherit; text-decoration:none; }
 
-  .main-row{
+  .wrap{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 16px;
+  }
+
+  .hdr{
     display:grid;
     grid-template-columns: 220px 1fr 320px;
     gap: 12px;
     align-items:center;
-    padding: 12px 0;
   }
 
   /* Brand */
   .brand{
-    display:flex; align-items:center; gap: 10px;
-    min-width: 0;
+    display:flex;
+    align-items:center;
+    gap: 10px;
   }
-  .brand-badge{
+  .logo{
     width: 44px; height: 44px;
     border-radius: 14px;
-    background: #fff;
-    border: 1px solid rgba(0,0,0,.08);
-    display:flex; align-items:center; justify-content:center;
+    background: var(--brand);
+    display:flex;
+    align-items:center;
+    justify-content:center;
     font-weight: 1000;
-    color: #111;
-    flex:0 0 auto;
-    box-shadow: 0 8px 18px rgba(0,0,0,.10);
+    color: var(--dark);
   }
-  .brand-text{ min-width:0; line-height:1.1; }
-  .brand-name{
-    font-weight: 1000;
-    font-size: 15px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    max-width: 160px;
-  }
-  .brand-tag{
-    margin-top: 4px;
-    font-size: 12px;
-    color: rgba(0,0,0,.65);
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    max-width: 180px;
-  }
+  .brandName{ font-weight: 1000; font-size: 15px; }
+  .brandTag{ font-size: 12px; color: rgba(15,23,42,.65); }
 
   /* Search */
   .search{
@@ -128,662 +72,293 @@
     align-items:center;
     gap: 8px;
     background: #fff;
+    border: 1px solid rgba(0,0,0,.10);
     border-radius: 999px;
     padding: 8px 10px;
-    border: 1px solid rgba(0,0,0,.10);
-    box-shadow: 0 10px 22px rgba(0,0,0,.10);
-  }
-  .search .icon{
-    width: 34px; height: 34px;
-    border-radius: 999px;
-    background: var(--soft);
-    border: 1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    flex:0 0 auto;
-    color: rgba(16,24,32,.88);
   }
   .search input{
-    flex: 1;
+    flex:1;
     border:0;
     outline:0;
-    background: transparent;
-    font-size: 14px;
-    color: var(--text);
-    padding: 6px 6px;
+    font-size:14px;
   }
-  .search input::placeholder{ color: rgba(107,114,128,.92); }
   .search button{
     border:0;
-    cursor:pointer;
-    border-radius: 999px;
-    padding: 10px 14px;
-    background: var(--noon2);
+    background: var(--dark);
     color:#fff;
-    font-weight: 1000;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor:pointer;
+    font-weight: 700;
   }
-  .search button:hover{ filter: brightness(1.05); }
 
-  /* Actions */
-  .actions{
+  /* Right */
+  .right{
     display:flex;
-    align-items:center;
     justify-content:flex-end;
     gap: 10px;
+    align-items:center;
     flex-wrap:wrap;
   }
-  .act{
-    display:inline-flex;
-    align-items:center;
-    gap: 10px;
-    padding: 9px 10px;
+
+  .btn{
+    padding: 10px 12px;
     border-radius: 14px;
-    border: 1px solid rgba(0,0,0,.10);
-    background: rgba(255,255,255,.92);
+    border: 1px solid rgba(0,0,0,.1);
+    background:#fff;
     cursor:pointer;
-    user-select:none;
-    transition:.18s ease;
+    font-weight:700;
   }
-  .act:hover{ transform: translateY(-1px); box-shadow: 0 10px 20px rgba(0,0,0,.12); }
-  .act .ico{
-    width: 36px; height: 36px;
-    border-radius: 12px;
-    background: var(--soft);
-    border: 1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-    flex:0 0 auto;
-  }
-  .act .lbl{ line-height:1.1; }
-  .act .t1{ font-size: 12px; font-weight: 1000; }
-  .act .t2{
-    margin-top: 3px;
-    font-size: 12px;
-    color: rgba(0,0,0,.62);
-    max-width: 140px;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-  .badge{
-    min-width: 22px;
-    height: 22px;
-    padding: 0 7px;
-    border-radius: 999px;
-    background: #fff;
-    border: 1px solid rgba(0,0,0,.12);
-    color: #111;
-    font-weight: 1000;
-    font-size: 12px;
-    display:inline-flex; align-items:center; justify-content:center;
-    margin-inline-start: 4px;
+  .btn.primary{
+    background: var(--brand);
+    color: var(--dark);
   }
 
-  /* ===== Categories bar (horizontal scroll like noon) ===== */
-  .cats{
-    background: #fff;
+  .userChip{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    border:1px solid rgba(0,0,0,.1);
+    background:#fff;
+    max-width:200px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  /* ================= DESKTOP NAVBAR ================= */
+  .navbar{
+    background: var(--soft);
+    border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
   }
-  .cats-row{
+
+  .nav-row{
     display:flex;
-    align-items:center;
     gap: 10px;
-    padding: 10px 0;
-  }
-  .cats-btn{
-    display:inline-flex;
     align-items:center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    background: var(--soft);
-    cursor:pointer;
-    font-weight: 900;
-    white-space:nowrap;
-  }
-  .cats-btn:hover{ background: var(--soft2); }
-  .cats-scroll{
-    display:flex;
-    gap: 8px;
-    overflow:auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    padding-bottom: 2px;
-    flex: 1;
-  }
-  .cats-scroll::-webkit-scrollbar{ height: 8px; }
-  .cats-scroll::-webkit-scrollbar-thumb{ background: rgba(0,0,0,.12); border-radius: 999px; }
-  .cat{
-    display:inline-flex;
-    align-items:center;
-    gap: 8px;
-    padding: 10px 12px;
-    border-radius: 999px;
-    border: 1px solid var(--line);
-    background: #fff;
-    font-size: 13px;
-    white-space:nowrap;
-    transition:.18s ease;
-  }
-  .cat:hover{ background: var(--soft); }
-  .cat.hot{
-    border-color: rgba(0,0,0,.16);
-    background: rgba(255,212,0,.25);
-    font-weight: 1000;
+    flex-wrap:wrap;
+
+    /* ✅ وسط النافبار */
+    justify-content:center;
   }
 
-  /* ===== Drawer for mobile categories ===== */
-  .drawer-backdrop{
+  .nav-link{
+    padding: 10px 16px;
+    border-radius: 12px; /* بدل pill عشان يطلع مربع لطيف */
+    font-weight:800;
+    font-size:14px;
+    transition: .18s ease;
+  }
+
+  /* ✅ Hover أبيض مربع بدون بوردر */
+  .nav-link:hover{
+    background: #fff;
+    border: 0;
+    box-shadow: 0 10px 18px rgba(15,23,42,.08);
+    transform: translateY(-1px);
+  }
+
+  /* ================= MOBILE SIDEBAR ================= */
+  .sidebar-backdrop{
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.35);
     opacity: 0;
     pointer-events:none;
-    transition: opacity .18s ease;
-    z-index: 9990;
+    transition:.2s;
+    z-index: 1999;
   }
-  .drawer-backdrop.show{ opacity: 1; pointer-events:auto; }
-  .drawer{
+  .sidebar-backdrop.show{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .sidebar{
     position: fixed;
     top: 0;
     inset-inline-start: 0;
+    width: 280px;
     height: 100%;
-    width: min(360px, 86vw);
     background: #fff;
+    box-shadow: -20px 0 40px rgba(0,0,0,.25);
     transform: translateX(110%);
-    transition: transform .22s ease;
-    z-index: 9991;
-    box-shadow: -20px 0 40px rgba(0,0,0,.18);
+    transition: .25s ease;
+    z-index: 2000;
     display:flex;
     flex-direction:column;
   }
-  .drawer.show{ transform: translateX(0); }
-  .drawer-head{
-    padding: 14px 14px;
+  .sidebar.show{
+    transform: translateX(0);
+  }
+
+  .sidebar-head{
+    padding: 16px;
     border-bottom: 1px solid var(--line);
     display:flex;
-    align-items:center;
     justify-content:space-between;
-    gap: 10px;
+    align-items:center;
   }
-  .drawer-title{
-    font-weight: 1000;
-    font-size: 14px;
+  .sidebar-title{
+    font-weight:1000;
   }
-  .drawer-close{
-    border: 1px solid var(--line);
+  .sidebar-close{
+    border:0;
     background: var(--soft);
+    padding: 6px 10px;
+    border-radius: 10px;
     cursor:pointer;
-    border-radius: 12px;
-    padding: 8px 10px;
-    font-weight: 900;
+    font-weight:900;
   }
-  .drawer-body{
-    padding: 12px 14px;
-    overflow:auto;
-  }
-  .drawer-grid{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .drawer-item{
-    border: 1px solid var(--line);
-    background: #fff;
-    border-radius: 14px;
-    padding: 12px 12px;
-    font-size: 13px;
-  }
-  .drawer-item:hover{ background: var(--soft); }
 
-  /* ===== Bottom nav (mobile) ===== */
-  .bottom-nav{
-    display:none;
-    position: fixed;
-    bottom: 0;
-    inset-inline: 0;
-    background: #fff;
-    border-top: 1px solid var(--line);
-    z-index: 9992;
-  }
-  .bottom-row{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 8px 12px;
-    display:grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-  }
-  .b-item{
+  .sidebar-nav{
+    padding: 12px;
     display:flex;
     flex-direction:column;
-    align-items:center;
     gap: 6px;
-    padding: 8px 8px;
-    border-radius: 12px;
-    border: 1px solid transparent;
-    color: rgba(16,24,32,.92);
   }
-  .b-item:hover{ background: var(--soft); border-color: var(--line); }
-  .b-ico{
-    width: 34px; height: 34px;
-    border-radius: 12px;
-    background: var(--soft);
-    border: 1px solid var(--line);
-    display:flex; align-items:center; justify-content:center;
-  }
-  .b-txt{ font-size: 12px; font-weight: 900; }
-
-  /* Toast */
-  .toast{
-    position: fixed;
-    bottom: 78px; /* above bottom nav */
-    inset-inline-end: 18px; /* bottom-right in RTL */
-    max-width: 360px;
-    background: rgba(255,255,255,.98);
-    border: 1px solid var(--line);
+  .sidebar-link{
+    padding: 12px 14px;
     border-radius: 14px;
-    box-shadow: 0 16px 34px rgba(16,24,32,.12);
-    padding: 12px 12px;
-    display:flex;
-    gap: 10px;
-    align-items:flex-start;
-    transform: translateY(10px);
-    opacity: 0;
-    pointer-events:none;
-    transition: opacity .18s ease, transform .18s ease;
-    z-index: 9999;
+    font-weight:800;
+    transition: .18s ease;
   }
-  .toast.show{ opacity:1; transform: translateY(0); pointer-events:auto; }
-  .toast .t-title{ font-weight: 1000; font-size: 13px; }
-  .toast .t-msg{ font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.6; }
-  .toast .t-x{
-    margin-inline-start:auto;
-    border:0;
-    background: transparent;
-    cursor:pointer;
-    color: rgba(107,114,128,.95);
-    padding: 4px 6px;
-    border-radius: 10px;
-  }
-  .toast .t-x:hover{ background: rgba(0,0,0,.06); }
 
-  /* Responsive */
-  @media (max-width: 980px){
-    .main-row{ grid-template-columns: 1fr; }
-    .actions{ justify-content: space-between; }
-    .brand-badge{ box-shadow:none; }
+  /* ✅ Hover أبيض مربع بدون بوردر داخل السايدبار */
+  .sidebar-link:hover{
+    background:#fff;
+    box-shadow: 0 10px 18px rgba(15,23,42,.08);
+    transform: translateY(-1px);
   }
-  @media (max-width: 760px){
-    .topbar{ display:none; }
-    .cats{ display:none; }
-    .bottom-nav{ display:block; }
-    .toast{ bottom: 86px; inset-inline: 12px; max-width:none; }
+
+  /* Sidebar open button (mobile only) */
+  .openSidebar{
+    display:none;
+    border:0;
+    background: var(--brand);
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-weight:1000;
+    cursor:pointer;
+  }
+
+  /* ================= RESPONSIVE ================= */
+  @media (max-width: 980px){
+    .hdr{
+      grid-template-columns: 1fr;
+    }
+    .right{
+      justify-content:space-between;
+    }
+    .navbar{
+      display:none;
+    }
+    .openSidebar{
+      display:inline-block;
+    }
   }
 </style>
 
 <header class="site-header">
 
-  <!-- Thin top bar -->
-  <div class="topbar">
-    <div class="wrap">
-      <div class="topbar-row">
-        <div class="top-links">
-          <a class="top-link" href="#featured">عروض اليوم</a>
-          <a class="top-link" href="#categories">الأقسام</a>
-          <a class="top-link" href="#" data-action="support">الدعم</a>
-          <a class="top-link" href="#" data-action="policy">الضمان والاستبدال</a>
-          <span class="top-pill">شحن سريع • دفع آمن</span>
+  <!-- ===== HEADER TOP ===== -->
+  <div class="wrap">
+    <div class="hdr">
+
+      <a href="{% url 'orders:home' %}" class="brand">
+        <div class="logo">M</div>
+        <div>
+          <div class="brandName">مرتكز</div>
+          <div class="brandTag">Tech Store</div>
         </div>
-
-        <div class="top-auth">
-          {% if request.user.is_authenticated %}
-            <span class="top-pill">
-              مرحباً، {{ request.user.get_full_name|default:request.user.username }}
-            </span>
-            <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
-              {% csrf_token %}
-              <button type="submit" class="top-btn">تسجيل خروج</button>
-            </form>
-          {% else %}
-            <a class="top-link" href="{% url 'accounts:login' %}" data-action="login">تسجيل الدخول</a>
-            <a class="top-link" href="{% url 'accounts:signup' %}" data-action="signup">حساب جديد</a>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Main yellow bar -->
-  <div class="mainbar" id="mainHeader">
-    <div class="wrap">
-      <div class="main-row">
-
-        <div class="brand">
-          <a href="{% url 'orders:home' %}" class="brand" aria-label="الرئيسية">
-            <span class="brand-badge">M</span>
-            <span class="brand-text">
-              <div class="brand-name">مرتكز</div>
-              <div class="brand-tag">tech store</div>
-            </span>
-          </a>
-        </div>
-
-        <form class="search" id="searchForm" action="#" method="get" role="search" aria-label="بحث">
-          <span class="icon" aria-hidden="true">🔎</span>
-          <input id="q" name="q" type="search" placeholder="وش تبي تشتري اليوم؟" autocomplete="off" />
-          <button type="submit">بحث</button>
-        </form>
-
-        <div class="actions">
-          <a class="act" href="#" data-action="account" aria-label="حسابي">
-            <span class="ico">👤</span>
-            <span class="lbl">
-              <div class="t1">حسابي</div>
-              {% if request.user.is_authenticated %}
-                <div class="t2">{{ request.user.get_full_name|default:request.user.username }}</div>
-              {% else %}
-                <div class="t2">تسجيل / حساب</div>
-              {% endif %}
-            </span>
-          </a>
-
-          <button class="act" type="button" id="favBtn" aria-pressed="false" aria-label="المفضلة">
-            <span class="ico">❤</span>
-            <span class="lbl">
-              <div class="t1">المفضلة</div>
-              <div class="t2">العناصر <span class="badge" id="favCount">0</span></div>
-            </span>
-          </button>
-
-          <a class="act" href="{% url 'orders:cart_detail' %}" data-action="cart" aria-label="السلة">
-            <span class="ico">🛒</span>
-            <span class="lbl">
-              <div class="t1">السلة</div>
-              <div class="t2">العناصر <span class="badge" id="cartCountBadge">0</span></div>
-            </span>
-          </a>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- Categories scroll bar (desktop/tablet) -->
-  <div class="cats">
-    <div class="wrap">
-      <div class="cats-row">
-        <button class="cats-btn" type="button" id="catsDrawerBtn">☰ كل الأقسام</button>
-
-        <div class="cats-scroll" aria-label="الأقسام">
-          <a class="cat hot" href="#featured">خصومات</a>
-          <a class="cat" href="#categories">الأقسام</a>
-          <a class="cat" href="#">لابتوبات</a>
-          <a class="cat" href="#">جوالات</a>
-          <a class="cat" href="#">سماعات</a>
-          <a class="cat" href="#">إكسسوارات</a>
-          <a class="cat" href="#">منزل ذكي</a>
-          <a class="cat" href="#">شاشات</a>
-          <a class="cat" href="#">طابعات</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Drawer -->
-  <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawer-head">
-      <div class="drawer-title">كل الأقسام</div>
-      <button class="drawer-close" type="button" id="drawerClose">إغلاق</button>
-    </div>
-    <div class="drawer-body">
-      <div class="drawer-grid">
-        <a class="drawer-item" href="#">لابتوبات</a>
-        <a class="drawer-item" href="#">جوالات</a>
-        <a class="drawer-item" href="#">سماعات</a>
-        <a class="drawer-item" href="#">إكسسوارات</a>
-        <a class="drawer-item" href="#">منزل ذكي</a>
-        <a class="drawer-item" href="#">شاشات</a>
-        <a class="drawer-item" href="#">طابعات</a>
-        <a class="drawer-item" href="#">ألعاب</a>
-        <a class="drawer-item" href="#">شبكات</a>
-        <a class="drawer-item" href="#">تخزين</a>
-      </div>
-    </div>
-  </aside>
-
-  <!-- Toast -->
-  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
-    <div>
-      <div class="t-title" id="toastTitle">تم</div>
-      <div class="t-msg" id="toastMsg">...</div>
-    </div>
-    <button class="t-x" type="button" id="toastClose" aria-label="إغلاق">✕</button>
-  </div>
-
-  <!-- Bottom nav (mobile) -->
-  <nav class="bottom-nav" aria-label="تنقل سفلي">
-    <div class="bottom-row">
-      <a class="b-item" href="{% url 'orders:home' %}">
-        <span class="b-ico">🏠</span>
-        <span class="b-txt">الرئيسية</span>
       </a>
 
-      <button class="b-item" type="button" id="mobileCatsBtn" style="border:0;background:transparent;cursor:pointer;">
-        <span class="b-ico">☰</span>
-        <span class="b-txt">الأقسام</span>
-      </button>
+      <form class="search" method="get" action="#">
+        <input type="search" name="q" placeholder="ابحث عن منتج..." />
+        <button type="submit">بحث</button>
+      </form>
 
-      <button class="b-item" type="button" id="mobileFavBtn" style="border:0;background:transparent;cursor:pointer;">
-        <span class="b-ico">❤</span>
-        <span class="b-txt">المفضلة</span>
-      </button>
+      <div class="right">
+        {% if request.user.is_authenticated %}
+          <div class="userChip">
+            👤 {{ request.user.get_full_name|default:request.user.username }}
+          </div>
+          <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button class="btn" type="submit">خروج</button>
+          </form>
+        {% else %}
+          <a href="{% url 'accounts:login' %}" class="btn">تسجيل الدخول</a>
+          <a href="{% url 'accounts:signup' %}" class="btn primary">إنشاء حساب</a>
+        {% endif %}
 
-      <a class="b-item" href="{% url 'orders:cart_detail' %}">
-        <span class="b-ico">🛒</span>
-        <span class="b-txt">السلة</span>
-      </a>
+        <button class="openSidebar" id="openSidebar">☰ القائمة</button>
+      </div>
+
     </div>
-  </nav>
+  </div>
+
+  <!-- ===== DESKTOP NAVBAR ===== -->
+  <div class="navbar">
+    <div class="wrap">
+      <nav class="nav-row">
+        <a href="{% url 'orders:home' %}" class="nav-link">الرئيسية</a>
+        <a href="#" class="nav-link">الأقسام</a>
+        <a href="#" class="nav-link">العروض</a>
+        <a href="#" class="nav-link">الأكثر مبيعاً</a>
+        <a href="#" class="nav-link">وصل حديثاً</a>
+        <a href="#" class="nav-link">تواصل معنا</a>
+      </nav>
+    </div>
+  </div>
 
 </header>
 
-{# ===== بيانات الترحيب من الجلسة (بدون JS inline مع Django داخل السكربت) ===== #}
-{% if request.user.is_authenticated %}
-  <div id="welcomeData"
-       data-authed="1"
-       data-name="{{ request.user.get_full_name|default:request.user.username|escape }}"
-       hidden></div>
-{% else %}
-  <div id="welcomeData" data-authed="0" data-name="" hidden></div>
-{% endif %}
+<!-- ===== MOBILE SIDEBAR ===== -->
+<div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-title">القائمة</div>
+    <button class="sidebar-close" id="closeSidebar">✕</button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="{% url 'orders:home' %}" class="sidebar-link">الرئيسية</a>
+    <a href="#" class="sidebar-link">الأقسام</a>
+    <a href="#" class="sidebar-link">العروض</a>
+    <a href="#" class="sidebar-link">الأكثر مبيعاً</a>
+    <a href="#" class="sidebar-link">وصل حديثاً</a>
+    <a href="#" class="sidebar-link">تواصل معنا</a>
+  </nav>
+</aside>
 
 <script>
   (function(){
-    const header = document.getElementById('mainHeader');
+    const openBtn = document.getElementById('openSidebar');
+    const closeBtn = document.getElementById('closeSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
 
-    // drawer
-    const drawerBtn = document.getElementById('catsDrawerBtn');
-    const mobileCatsBtn = document.getElementById('mobileCatsBtn');
-    const drawer = document.getElementById('drawer');
-    const backdrop = document.getElementById('drawerBackdrop');
-    const drawerClose = document.getElementById('drawerClose');
-
-    // actions
-    const cartBadge = document.getElementById('cartCountBadge');
-    const favBtn = document.getElementById('favBtn');
-    const favCount = document.getElementById('favCount');
-    const mobileFavBtn = document.getElementById('mobileFavBtn');
-
-    // toast
-    const toast = document.getElementById('toast');
-    const toastTitle = document.getElementById('toastTitle');
-    const toastMsg = document.getElementById('toastMsg');
-    const toastClose = document.getElementById('toastClose');
-    let toastTimer = null;
-
-    function safeInt(v){
-      const n = parseInt(v, 10);
-      return Number.isFinite(n) && n >= 0 ? n : 0;
-    }
-
-    function toastShow(title, msg, ms){
-      if(!toast) return;
-      toastTitle.textContent = title || 'تنبيه';
-      toastMsg.textContent = msg || '';
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      const dur = (typeof ms === 'number' && ms >= 800) ? ms : 2400;
-      toastTimer = setTimeout(() => toast.classList.remove('show'), dur);
-    }
-    window.appToast = toastShow;
-
-    if(toastClose){
-      toastClose.addEventListener('click', () => toast.classList.remove('show'));
-    }
-
-    function onScroll(){
-      if(!header) return;
-      header.classList.toggle('is-scrolled', window.scrollY > 8);
-    }
-    window.addEventListener('scroll', onScroll, {passive:true});
-    onScroll();
-
-    // ===== Drawer open/close =====
-    function openDrawer(){
-      if(!drawer || !backdrop) return;
-      drawer.classList.add('show');
-      drawer.setAttribute('aria-hidden','false');
-      backdrop.hidden = false;
+    function openSidebar(){
+      sidebar.classList.add('show');
       backdrop.classList.add('show');
-      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
     }
-    function closeDrawer(){
-      if(!drawer || !backdrop) return;
-      drawer.classList.remove('show');
-      drawer.setAttribute('aria-hidden','true');
+    function closeSidebar(){
+      sidebar.classList.remove('show');
       backdrop.classList.remove('show');
-      setTimeout(()=>{ backdrop.hidden = true; }, 180);
-      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     }
 
-    if(drawerBtn) drawerBtn.addEventListener('click', openDrawer);
-    if(mobileCatsBtn) mobileCatsBtn.addEventListener('click', openDrawer);
-    if(drawerClose) drawerClose.addEventListener('click', closeDrawer);
-    if(backdrop) backdrop.addEventListener('click', closeDrawer);
-    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeDrawer(); });
+    if(openBtn) openBtn.addEventListener('click', openSidebar);
+    if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+    if(backdrop) backdrop.addEventListener('click', closeSidebar);
 
-    // ===== Search =====
-    const searchForm = document.getElementById('searchForm');
-    if(searchForm){
-      searchForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const q = document.getElementById('q')?.value?.trim();
-        if(!q) return toastShow('البحث', 'اكتب كلمة البحث أولاً');
-        toastShow('البحث', 'جاري البحث عن: ' + q);
-      });
-    }
-
-    // ===== cart summary from server =====
-    async function fetchCartCount(){
-      const url = "{% url 'orders:cart_summary' %}";
-      try{
-        const res = await fetch(url, {
-          method: 'GET',
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        });
-        const data = await res.json();
-        if(!res.ok || !data || data.ok !== true) return null;
-        return safeInt(data.cart_count);
-      }catch(_){
-        return null;
-      }
-    }
-    async function syncCartFromServer(){
-      if(!cartBadge) return;
-      const count = await fetchCartCount();
-      if(count === null) return;
-      cartBadge.textContent = String(count);
-    }
-
-    // ===== Favorites (demo localStorage) =====
-    function syncFavBadge(){
-      if(favCount) favCount.textContent = String(safeInt(localStorage.getItem('fav_count')));
-    }
-
-    syncFavBadge();
-    syncCartFromServer();
-
-    window.addEventListener('cart:updated', (e) => {
-      const count = e && e.detail && typeof e.detail.count !== 'undefined' ? safeInt(e.detail.count) : null;
-      if(count !== null && cartBadge){
-        cartBadge.textContent = String(count);
-      }else{
-        syncCartFromServer();
-      }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeSidebar();
     });
-
-    window.addEventListener('fav:updated', syncFavBadge);
-    window.addEventListener('storage', (e)=>{
-      if(e.key === 'fav_count') syncFavBadge();
-    });
-
-    function toggleFav(){
-      const cur = safeInt(localStorage.getItem('fav_count'));
-      const next = cur === 0 ? 1 : 0;
-      localStorage.setItem('fav_count', String(next));
-      if(favBtn) favBtn.setAttribute('aria-pressed', next > 0 ? 'true' : 'false');
-      syncFavBadge();
-      toastShow('المفضلة', next > 0 ? 'تمت الإضافة ✅' : 'تمت الإزالة');
-      window.dispatchEvent(new Event('fav:updated'));
-    }
-
-    if(favBtn) favBtn.addEventListener('click', toggleFav);
-    if(mobileFavBtn) mobileFavBtn.addEventListener('click', toggleFav);
-
-    // ===== Actions demo handling (لا تمنع cart/login/signup) =====
-    document.querySelectorAll('[data-action]').forEach(el=>{
-      el.addEventListener('click',(e)=>{
-        const a = el.getAttribute('data-action') || '';
-        if(a !== 'cart' && a !== 'login' && a !== 'signup'){
-          e.preventDefault();
-          toastShow('تنبيه', 'زر ('+a+') جاهز — اربطه بالباكند لاحقاً');
-        }
-      });
-    });
-
-    // لا تمنع تنقّل صفحات الدخول/التسجيل
-    function forceNavigate(selector){
-      const el = document.querySelector(selector);
-      if(!el) return;
-      el.addEventListener('click', function(e){
-        const href = (this.getAttribute('href') || '').trim();
-        if(!href || href === '#') return;
-        e.stopPropagation();
-      }, true);
-    }
-    forceNavigate('[data-action="login"]');
-    forceNavigate('[data-action="signup"]');
-
-    // ===== ✅ ترحيب باسم المستخدم (من الجلسة) كتـوست أسفل الشاشة يمين =====
-    // يظهر مرة واحدة فقط لكل جلسة/متصفح (localStorage).
-    (function welcomeToastOnce(){
-      const dataEl = document.getElementById('welcomeData');
-      if(!dataEl) return;
-
-      const authed = (dataEl.getAttribute('data-authed') || '0') === '1';
-      if(!authed) return;
-
-      const rawName = dataEl.getAttribute('data-name') || '';
-      const name = rawName.trim() || 'مستخدمنا';
-
-      const key = 'welcome_toast_shown_v1';
-      if(localStorage.getItem(key) === '1') return;
-
-      // تأخير بسيط عشان تكون الصفحة جاهزة
-      setTimeout(() => {
-        toastShow('أهلاً وسهلاً 👋', 'مرحباً ' + name + '، سعدنا بعودتك', 3200);
-        try{ localStorage.setItem(key, '1'); }catch(_){}
-      }, 650);
-    })();
-
   })();
 </script>
